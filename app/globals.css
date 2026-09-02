@@ -1,2 +1,27 @@
 @import "tailwindcss";
 
+@theme {
+  --color-lightHover: #fcf4ff;
+  --color-darkHover: #2a004a;
+  --color-darkTheme: #11001f;
+}
+
+* {
+  font-family: var(--font-outfit);
+}
+
+h1,
+h2,
+h3 {
+ font-family: var(--font-outfit);
+}
+
+li a{
+  font-family: var(--font-ovo);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+button {
+  font-family: var(--font-outfit);
+}

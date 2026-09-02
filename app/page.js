@@ -1,11 +1,12 @@
-import React from 'react'
+"use client"
+import Navbar from "./components/Navbar"
 
-function page() {
+function Home() {
   return (
-    <div>
-      <h1>Hello world</h1>
-    </div>
+    <>
+      <Navbar />
+    </>
   )
 }
 
-export default page
+export default Home
