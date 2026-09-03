@@ -1,27 +1,47 @@
 @import "tailwindcss";
 
 @theme {
-  --color-lightHover: #fcf4ff;
-  --color-darkHover: #2a004a;
-  --color-darkTheme: #11001f;
+  --color-lightHover: #fff1f1;
+  --color-darkHover: #3b0a0a;
+  --color-darkTheme: #120000;
+
+  --shadow-black: 4px 4px 0 #000;
+  --shadow-white: 4px 4px 0 #fff;
 }
 
+/* Default font */
 * {
   font-family: var(--font-outfit);
 }
 
+/* Headings */
 h1,
 h2,
-h3 {
- font-family: var(--font-outfit);
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-outfit);
 }
 
-li a{
+/* Paragraph */
+p {
   font-family: var(--font-ovo);
-  font-weight: 500;
-  text-transform: uppercase;
+  font-weight: 400;
 }
 
+/* Links */
+a {
+  font-family: var(--font-outfit);
+}
+
+/* Buttons */
 button {
   font-family: var(--font-outfit);
+}
+
+/* List text */
+li {
+  font-family: var(--font-ovo);
+  font-weight: 500;
 }

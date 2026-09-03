@@ -27,7 +27,7 @@ function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
-
+ const [isscroll, isSetScroll] = useState(false);
   // Services dropdown reference
   const servicesRef = useRef(null);
 
@@ -131,7 +131,15 @@ function Navbar() {
   const toggleMobileServices = () => {
     setIsMobileServicesOpen((prev) => !prev);
   };
-
+  useEffect(()=>{
+    window.addEventListener("scroll",()=>{
+      if(scrollY >50){
+       isSetScroll(true)
+      }else{
+isSetScroll(false)
+      }
+    })
+  })
   return (
     <>
       {/* ========================================
@@ -151,7 +159,7 @@ function Navbar() {
       ========================================= */}
       <header className="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 lg:px-8 xl:px-[6%] pt-4 sm:pt-5">
         <nav
-          className="
+          className={`
             mx-auto
             w-full
             max-w-[1440px]
@@ -176,8 +184,8 @@ function Navbar() {
             border
             border-white/70
 
-            shadow-[0_8px_30px_rgba(0,0,0,0.06)]
-          "
+        
+           ${isscroll ? "bg-white bg-opacity-50 backdrop-blur-lg  shadow-[0_1px_3px_rgba(0,0,0,0.05)]" : ""}`}
         >
           {/* ========================================
               LOGO
@@ -208,22 +216,22 @@ function Navbar() {
               DESKTOP NAVIGATION
           ========================================= */}
           <ul
-            className="
+            className={`
               hidden
               md:flex
               items-center
               gap-1
               lg:gap-2
 
-              bg-gray-50/70
-              border
-              border-gray-100
+              
+             
 
               rounded-full
 
               p-1.5
               lg:p-2
-            "
+              ${isscroll ? "" :"bg-gray-50/70 border border-gray-500"}
+            `}
           >
             {/* HOME */}
             <li>
