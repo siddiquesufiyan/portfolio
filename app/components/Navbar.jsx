@@ -2,6 +2,7 @@
 
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 // React Icons
@@ -15,10 +16,7 @@ import {
   FiX,
 } from "react-icons/fi";
 
-import {
-  FaWhatsapp,
-  FaFacebookF,
-} from "react-icons/fa";
+import { FaWhatsapp, FaFacebookF } from "react-icons/fa";
 
 function Navbar() {
   // =========================
@@ -27,7 +25,8 @@ function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
- const [isscroll, isSetScroll] = useState(false);
+  const [isScroll, setIsScroll] = useState(false);
+
   // Services dropdown reference
   const servicesRef = useRef(null);
 
@@ -37,39 +36,60 @@ function Navbar() {
   const services = [
     {
       name: "SEO",
-      href: "#seo",
+      href: "/services/seo",
       icon: FiSearch,
     },
     {
       name: "Website Design",
-      href: "#website-design",
+      href: "/services/website-design",
       icon: FiMonitor,
     },
     {
       name: "WhatsApp Marketing",
-      href: "#whatsapp-marketing",
+      href: "/services/whatsapp-marketing",
       icon: FaWhatsapp,
     },
     {
       name: "Facebook Ads",
-      href: "#facebook-ads",
+      href: "/services/facebook-ads",
       icon: FaFacebookF,
     },
     {
       name: "Video Editing",
-      href: "#video-editing",
+      href: "/services/video-editing",
       icon: FiVideo,
     },
     {
+      name: "GNB Creation",
+      href: "/services/gnb-creation",
+      icon: FiShare2,
+    },
+    {
       name: "Social Media Handling",
-      href: "#social-media",
+      href: "/services/social-media-handling",
       icon: FiShare2,
     },
   ];
 
   // =========================
-  // Close Desktop Dropdown
-  // When clicked outside
+  // Scroll Effect
+  // =========================
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScroll(window.scrollY > 50);
+    };
+
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // =========================
+  // Close Dropdown / Escape
   // =========================
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -100,10 +120,13 @@ function Navbar() {
 
   // =========================
   // Prevent Background Scroll
-  // When Mobile Menu Open
   // =========================
   useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
 
     return () => {
       document.body.style.overflow = "";
@@ -131,21 +154,13 @@ function Navbar() {
   const toggleMobileServices = () => {
     setIsMobileServicesOpen((prev) => !prev);
   };
-  useEffect(()=>{
-    window.addEventListener("scroll",()=>{
-      if(scrollY >50){
-       isSetScroll(true)
-      }else{
-isSetScroll(false)
-      }
-    })
-  })
+
   return (
     <>
       {/* ========================================
           HEADER BACKGROUND
       ========================================= */}
-      <div className="fixed top-0 right-0 -z-10 w-full pointer-events-none">
+      <div className="fixed top-0 left-0 -z-10 w-full pointer-events-none">
         <Image
           src={assets.header_bg_color}
           alt=""
@@ -177,40 +192,43 @@ isSetScroll(false)
             xl:px-7
 
             rounded-2xl
-
-            bg-white/80
-            backdrop-blur-xl
-
             border
             border-white/70
+            backdrop-blur-xl
 
-        
-           ${isscroll ? "bg-white bg-opacity-50 backdrop-blur-lg  shadow-[0_1px_3px_rgba(0,0,0,0.05)]" : ""}`}
+            transition-all
+            duration-300
+
+            ${
+              isScroll
+                ? "bg-white/80 shadow-[0_1px_3px_rgba(0,0,0,0.05)]"
+                : "bg-white/80"
+            }
+          `}
         >
           {/* ========================================
               LOGO
           ========================================= */}
-          <a
-            href="#home"
+          <Link
+            href="/"
             aria-label="Go to homepage"
             onClick={closeMenu}
             className="shrink-0 cursor-pointer"
           >
             <Image
               src={assets.portfolio_logo}
-              alt="Freelancer portfolio logo"
+              alt="Sufiyan Web Marketing"
               className="
                 w-11
                 sm:w-12
                 lg:w-14
                 xl:w-[60px]
                 h-auto
-                cursor-pointer
                 object-contain
               "
               priority
             />
-          </a>
+          </Link>
 
           {/* ========================================
               DESKTOP NAVIGATION
@@ -223,74 +241,68 @@ isSetScroll(false)
               gap-1
               lg:gap-2
 
-              
-             
-
               rounded-full
-
               p-1.5
               lg:p-2
-              ${isscroll ? "" :"bg-gray-50/70 border border-gray-500"}
+
+              transition-all
+              duration-300
+
+              ${
+                isScroll
+                  ? "bg-transparent border-transparent"
+                  : "bg-gray-50/70 border border-gray-200"
+              }
             `}
           >
             {/* HOME */}
             <li>
-              <a
-                href="#home"
+              <Link
+                href="/"
                 className="
                   block
                   px-4
                   lg:px-5
                   py-2
                   lg:py-2.5
-
                   text-sm
                   lg:text-[15px]
                   font-medium
-
                   rounded-full
-
                   cursor-pointer
-
                   hover:bg-white
                   hover:text-red-800
-
                   transition-all
                   duration-300
                 "
               >
                 Home
-              </a>
+              </Link>
             </li>
 
             {/* ABOUT */}
             <li>
-              <a
-                href="#about"
+              <Link
+                href="/about"
                 className="
                   block
                   px-4
                   lg:px-5
                   py-2
                   lg:py-2.5
-
                   text-sm
                   lg:text-[15px]
                   font-medium
-
                   rounded-full
-
                   cursor-pointer
-
                   hover:bg-white
                   hover:text-red-800
-
                   transition-all
                   duration-300
                 "
               >
                 About
-              </a>
+              </Link>
             </li>
 
             {/* ========================================
@@ -298,17 +310,16 @@ isSetScroll(false)
             ========================================= */}
             <li
               ref={servicesRef}
-              className="relative cursor-pointer"
+              className="relative flex items-center"
               onMouseEnter={() => setIsServicesOpen(true)}
             >
-              {/* Services Button */}
-              <button
-                type="button"
-                onClick={toggleServices}
+              {/* Services Link */}
+              <Link
+                href="/services"
                 className="
                   flex
                   items-center
-                  gap-2
+                  gap-1
 
                   px-4
                   lg:px-5
@@ -320,7 +331,7 @@ isSetScroll(false)
                   lg:text-[15px]
                   font-medium
 
-                  rounded-full
+                  rounded-l-full
 
                   cursor-pointer
 
@@ -330,16 +341,48 @@ isSetScroll(false)
                   transition-all
                   duration-300
                 "
-                aria-expanded={isServicesOpen}
               >
                 Services
+              </Link>
 
+              {/* Dropdown Arrow */}
+              <button
+                type="button"
+                onClick={toggleServices}
+                aria-label="Open services menu"
+                aria-expanded={isServicesOpen}
+                className="
+                  flex
+                  items-center
+                  justify-center
+
+                  h-full
+
+                  pr-4
+                  lg:pr-5
+                  pl-1
+
+                  py-2
+                  lg:py-2.5
+
+                  rounded-r-full
+
+                  cursor-pointer
+
+                  hover:bg-white
+                  hover:text-red-800
+
+                  transition-all
+                  duration-300
+                "
+              >
                 <FiChevronDown
                   size={15}
                   strokeWidth={2}
                   className={`
                     transition-transform
                     duration-300
+
                     ${isServicesOpen ? "rotate-180" : ""}
                   `}
                 />
@@ -394,13 +437,12 @@ isSetScroll(false)
                   const Icon = service.icon;
 
                   return (
-                    <a
+                    <Link
                       key={service.name}
                       href={service.href}
                       onClick={() => setIsServicesOpen(false)}
                       className="
                         group
-
                         flex
                         items-center
                         gap-3
@@ -439,14 +481,9 @@ isSetScroll(false)
 
                           transition-all
                           duration-300
-
-                          cursor-pointer
                         "
                       >
-                        <Icon
-                          size={17}
-                          strokeWidth={2}
-                        />
+                        <Icon size={17} strokeWidth={2} />
                       </span>
 
                       {/* Service Name */}
@@ -460,9 +497,8 @@ isSetScroll(false)
 
                           group-hover:text-red-800
 
-                          transition
-
-                          cursor-pointer
+                          transition-colors
+                          duration-300
                         "
                       >
                         {service.name}
@@ -479,11 +515,9 @@ isSetScroll(false)
 
                           transition-all
                           duration-300
-
-                          cursor-pointer
                         "
                       />
-                    </a>
+                    </Link>
                   );
                 })}
               </div>
@@ -491,62 +525,52 @@ isSetScroll(false)
 
             {/* MY WORK */}
             <li>
-              <a
-                href="#work"
+              <Link
+                href="/work"
                 className="
                   block
                   px-4
                   lg:px-5
                   py-2
                   lg:py-2.5
-
                   text-sm
                   lg:text-[15px]
                   font-medium
-
                   rounded-full
-
                   cursor-pointer
-
                   hover:bg-white
                   hover:text-red-800
-
                   transition-all
                   duration-300
                 "
               >
                 My Work
-              </a>
+              </Link>
             </li>
 
             {/* CONTACT */}
             <li>
-              <a
-                href="#contact"
+              <Link
+                href="/contact"
                 className="
                   block
                   px-4
                   lg:px-5
                   py-2
                   lg:py-2.5
-
                   text-sm
                   lg:text-[15px]
                   font-medium
-
                   rounded-full
-
                   cursor-pointer
-
                   hover:bg-white
                   hover:text-red-800
-
                   transition-all
                   duration-300
                 "
               >
                 Contact
-              </a>
+              </Link>
             </li>
           </ul>
 
@@ -586,13 +610,13 @@ isSetScroll(false)
               <Image
                 src={assets.moon_icon}
                 alt=""
-                className="w-4 sm:w-5 cursor-pointer"
+                className="w-4 sm:w-5"
               />
             </button>
 
             {/* Desktop Contact Button */}
-            <a
-              href="#contact"
+            <Link
+              href="/contact"
               className="
                 hidden
                 lg:flex
@@ -636,11 +660,10 @@ isSetScroll(false)
                   group-hover:translate-x-1
 
                   transition-transform
-
-                  cursor-pointer
+                  duration-300
                 "
               />
-            </a>
+            </Link>
 
             {/* ========================================
                 MOBILE HAMBURGER
@@ -675,7 +698,7 @@ isSetScroll(false)
               <Image
                 src={assets.menu_black}
                 alt=""
-                className="w-5 invert cursor-pointer"
+                className="w-5 invert"
               />
             </button>
           </div>
@@ -756,11 +779,13 @@ isSetScroll(false)
             border-gray-100
           "
         >
-          <Image
-            src={assets.portfolio_logo}
-            alt="Portfolio logo"
-            className="w-11 h-auto cursor-pointer"
-          />
+          <Link href="/" onClick={closeMenu}>
+            <Image
+              src={assets.portfolio_logo}
+              alt="Portfolio logo"
+              className="w-11 h-auto"
+            />
+          </Link>
 
           {/* Close Button */}
           <button
@@ -788,11 +813,7 @@ isSetScroll(false)
               duration-300
             "
           >
-            <FiX
-              size={19}
-              strokeWidth={2}
-              className="cursor-pointer"
-            />
+            <FiX size={19} strokeWidth={2} />
           </button>
         </div>
 
@@ -807,8 +828,8 @@ isSetScroll(false)
           <ul className="space-y-1">
             {/* HOME */}
             <li>
-              <a
-                href="#home"
+              <Link
+                href="/"
                 onClick={closeMenu}
                 className="
                   flex
@@ -835,15 +856,15 @@ isSetScroll(false)
 
                 <FiArrowRight
                   size={16}
-                  className="text-gray-300 cursor-pointer"
+                  className="text-gray-300"
                 />
-              </a>
+              </Link>
             </li>
 
             {/* ABOUT */}
             <li>
-              <a
-                href="#about"
+              <Link
+                href="/about"
                 onClick={closeMenu}
                 className="
                   flex
@@ -870,62 +891,77 @@ isSetScroll(false)
 
                 <FiArrowRight
                   size={16}
-                  className="text-gray-300 cursor-pointer"
+                  className="text-gray-300"
                 />
-              </a>
+              </Link>
             </li>
 
             {/* ========================================
                 MOBILE SERVICES
             ========================================= */}
             <li>
-              <button
-                type="button"
-                onClick={toggleMobileServices}
-                className="
-                  w-full
+              <div className="flex items-center">
+                {/* Services Page Link */}
+                <Link
+                  href="/services"
+                  onClick={closeMenu}
+                  className="
+                    flex-1
 
-                  flex
-                  items-center
-                  justify-between
+                    px-4
+                    py-3.5
 
-                  px-4
-                  py-3.5
+                    rounded-l-xl
 
-                  rounded-xl
+                    text-[15px]
+                    font-medium
 
-                  text-[15px]
-                  font-medium
-
-                  cursor-pointer
-
-                  hover:bg-gray-50
-                  hover:text-red-800
-
-                  transition
-                "
-                aria-expanded={isMobileServicesOpen}
-              >
-                <span className="cursor-pointer">
-                  Services
-                </span>
-
-                <FiChevronDown
-                  size={17}
-                  className={`
                     cursor-pointer
 
-                    transition-transform
-                    duration-300
+                    hover:bg-gray-50
+                    hover:text-red-800
 
-                    ${
-                      isMobileServicesOpen
-                        ? "rotate-180"
-                        : ""
-                    }
-                  `}
-                />
-              </button>
+                    transition
+                  "
+                >
+                  Services
+                </Link>
+
+                {/* Services Dropdown Button */}
+                <button
+                  type="button"
+                  onClick={toggleMobileServices}
+                  aria-label="Open services menu"
+                  aria-expanded={isMobileServicesOpen}
+                  className="
+                    px-4
+                    py-3.5
+
+                    rounded-r-xl
+
+                    cursor-pointer
+
+                    hover:bg-gray-50
+                    hover:text-red-800
+
+                    transition
+                  "
+                >
+                  <FiChevronDown
+                    size={17}
+                    className={`
+                      transition-transform
+                      duration-300
+
+                      ${
+                        isMobileServicesOpen
+                          ? "rotate-180"
+                          : ""
+                      }
+                    `}
+                  />
+                </button>
+              </div>
 
               {/* Mobile Services List */}
               <div
@@ -947,11 +983,13 @@ isSetScroll(false)
                     const Icon = service.icon;
 
                     return (
-                      <a
+                      <Link
                         key={service.name}
                         href={service.href}
                         onClick={closeMenu}
                         className="
+                          group
+
                           flex
                           items-center
                           gap-3
@@ -987,21 +1025,29 @@ isSetScroll(false)
                             bg-gray-100
                             text-gray-500
 
-                            group-hover:text-red-800
+                            group-hover:bg-red-800
+                            group-hover:text-white
 
-                            cursor-pointer
+                            transition-all
+                            duration-300
                           "
                         >
-                          <Icon
-                            size={14}
-                            className="cursor-pointer"
-                          />
+                          <Icon size={14} />
                         </span>
 
-                        <span className="cursor-pointer">
-                          {service.name}
-                        </span>
-                      </a>
+                        <span>{service.name}</span>
+
+                        <FiArrowRight
+                          size={13}
+                          className="
+                            ml-auto
+                            text-gray-300
+                            group-hover:text-red-800
+                            group-hover:translate-x-1
+                            transition-all
+                          "
+                        />
+                      </Link>
                     );
                   })}
                 </div>
@@ -1010,8 +1056,8 @@ isSetScroll(false)
 
             {/* MY WORK */}
             <li>
-              <a
-                href="#work"
+              <Link
+                href="/work"
                 onClick={closeMenu}
                 className="
                   flex
@@ -1038,15 +1084,15 @@ isSetScroll(false)
 
                 <FiArrowRight
                   size={16}
-                  className="text-gray-300 cursor-pointer"
+                  className="text-gray-300"
                 />
-              </a>
+              </Link>
             </li>
 
             {/* CONTACT */}
             <li>
-              <a
-                href="#contact"
+              <Link
+                href="/contact"
                 onClick={closeMenu}
                 className="
                   flex
@@ -1073,9 +1119,9 @@ isSetScroll(false)
 
                 <FiArrowRight
                   size={16}
-                  className="text-gray-300 cursor-pointer"
+                  className="text-gray-300"
                 />
-              </a>
+              </Link>
             </li>
           </ul>
 
@@ -1083,8 +1129,8 @@ isSetScroll(false)
               MOBILE CTA
           ========================================= */}
           <div className="mt-8 px-3">
-            <a
-              href="#contact"
+            <Link
+              href="/contact"
               onClick={closeMenu}
               className="
                 flex
@@ -1112,15 +1158,10 @@ isSetScroll(false)
                 duration-300
               "
             >
-              <span className="cursor-pointer">
-                Let's Work Together
-              </span>
+              <span>Let's Work Together</span>
 
-              <FiArrowRight
-                size={17}
-                className="cursor-pointer"
-              />
-            </a>
+              <FiArrowRight size={17} />
+            </Link>
           </div>
         </div>
       </aside>
