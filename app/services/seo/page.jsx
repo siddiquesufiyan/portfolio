@@ -1,6 +1,6 @@
 
 
-import SeoServices from "@/app/components/ServicesHero";
+import SeoServices from "@/app/components/SeoServices";
 import Testimonials from "@/app/components/Testimonials";
 import Faq from "@/app/components/Faq";
 export default function SeoPage() {
