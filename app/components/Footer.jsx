@@ -203,45 +203,46 @@ function Footer() {
 
             <ul className="space-y-3 text-sm">
 
-              <li>
-                <Link href="#services" className={linkClass}>
+           
+
+ <li>
+                <Link href="/services/website-design" className={linkClass}>
                   Website Design
                 </Link>
               </li>
-
               <li>
-                <Link href="#services" className={linkClass}>
+                <Link href="/services/seo" className={linkClass}>
                   SEO
                 </Link>
               </li>
 
               <li>
-                <Link href="#services" className={linkClass}>
+                <Link href="services/facebook-ads" className={linkClass}>
                   Facebook Ads
                 </Link>
               </li>
 
               <li>
-                <Link href="#services" className={linkClass}>
+                <Link href="services/whatsapp-marketing" className={linkClass}>
                   WhatsApp Marketing
                 </Link>
               </li>
 
               <li>
-                <Link href="#services" className={linkClass}>
+                <Link href="services/video-editing" className={linkClass}>
                   Video Editing
                 </Link>
               </li>
 
               <li>
-                <Link href="#services" className={linkClass}>
+                <Link href="services/gnb-creation" className={linkClass}>
                   GNB Creation
                 </Link>
               </li>
 
               <li>
-                <Link href="#services" className={linkClass}>
-                  Social Media Management
+                <Link href="services/graphic-design" className={linkClass}>
+                 Graphic Design
                 </Link>
               </li>
 
@@ -257,8 +258,12 @@ function Footer() {
               Quick Links
             </h3>
 
-            <ul className="space-y-3 text-sm">
-
+            <ul className="space-y-3 text-sm md:ml-3">
+   <li>
+                <Link href="/services" className={linkClass}>
+                  Sevices
+                </Link>
+              </li>
               <li>
                 <Link href="/" className={linkClass}>
                   Home
@@ -266,20 +271,20 @@ function Footer() {
               </li>
 
               <li>
-                <Link href="#about" className={linkClass}>
+                <Link href="/about" className={linkClass}>
                   About Me
                 </Link>
               </li>
 
             
               <li>
-                <Link href="#work" className={linkClass}>
+                <Link href="/work" className={linkClass}>
                   My Work
                 </Link>
               </li>
 
               <li>
-                <Link href="#contact" className={linkClass}>
+                <Link href="/contact" className={linkClass}>
                   Contact
                 </Link>
               </li>
