@@ -14,6 +14,7 @@ import {
   FiChevronDown,
   FiArrowRight,
   FiX,
+  FiPenTool,
 } from "react-icons/fi";
 
 import { FaWhatsapp, FaFacebookF } from "react-icons/fa";
@@ -64,11 +65,12 @@ const { isDarkMode, toggleTheme } = useTheme();
       href: "/services/gnb-creation",
       icon: FiShare2,
     },
-    {
-      name: "Social Media Handling",
-      href: "/services/social-media-handling",
-      icon: FiShare2,
-    },
+ 
+   {
+  name: "Graphic Design",
+  href: "/services/graphic-design",
+  icon: FiPenTool,
+}
   ];
 
   // =========================
