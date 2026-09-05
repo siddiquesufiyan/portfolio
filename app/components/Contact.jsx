@@ -47,20 +47,20 @@ function Contact() {
 
   return (
     <div
-      id="contact"
-      className="w-full px-[12%] py-8 scroll-mt-20 bg-[url(/footer-bg-color.png)] bg-no-repeat bg-center bg-[length:90%_auto]"
+    
+      className="w-full px-[12%] py-8 scroll-mt-20 dark:bg-none  bg-[url(/footer-bg-color.png)] bg-no-repeat bg-center bg-[length:90%_auto]"
     >
       {/* Heading */}
       <h4 className="text-center mb-2 text-lg">
         Connect With Me
       </h4>
 
-      <h2 className="text-center text-5xl">
+      <h2 className="text-center text-5xl dark:text-white">
         Contact Us
       </h2>
 
       {/* Description */}
-      <p className="text-center max-w-2xl mx-auto mt-5 mb-10 text-gray-600">
+      <p className="text-center dark:text-white max-w-2xl mx-auto mt-5 mb-10 text-gray-600">
         Have a project or business idea in mind? Feel free to get in touch
         with me. I provide digital marketing and web services including
         website design, SEO, social media management, Facebook Ads,
@@ -84,7 +84,7 @@ function Contact() {
             name="name"
             placeholder="Enter your full name"
             required
-            className="w-full px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 transition"
+            className="w-full dark:bg-transparent dark:border-gray-700 dark:text-white px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-red-900 focus:ring-2 focus:ring-red-900 transition"
           />
         </div>
 
@@ -101,7 +101,7 @@ function Contact() {
               name="email"
               placeholder="Enter your email"
               required
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 transition"
+              className="w-full dark:bg-transparent dark:border-gray-700 dark:text-white px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-red-900 focus:ring-2 focus:ring-red-900 transition"
             />
           </div>
 
@@ -116,7 +116,7 @@ function Contact() {
               name="phone"
               placeholder="Enter your phone number"
               required
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 transition"
+              className="w-full dark:bg-transparent dark:border-gray-700 dark:text-white px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-red-900 focus:ring-2 focus:ring-red-900 transition"
             />
           </div>
         </div>
@@ -131,41 +131,41 @@ function Contact() {
             name="service"
             required
             defaultValue=""
-            className="w-full px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 transition bg-white"
+            className="w-full dark:bg-none dark:bg-black  dark:text-white px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-red-900 focus:ring-2 focus:ring-red-900 transition bg-white"
           >
-            <option value="" disabled>
+            <option value="" disabled className="dark:bg-transparent dark:border-gray-700 dark:text-white">
               Select a service
             </option>
 
-            <option value="Website Design">
+            <option value="Website Design" className="dark:bg-transparent dark:border-gray-700 dark:text-white">
               Website Design
             </option>
 
-            <option value="SEO">
+            <option value="SEO" className="dark:bg-transparent dark:border-gray-700 dark:text-white">
               SEO
             </option>
 
-            <option value="Facebook Ads">
+            <option value="Facebook Ads" className="dark:bg-transparent dark:border-gray-700 dark:text-white">
               Facebook Ads
             </option>
 
-            <option value="WhatsApp Marketing">
+            <option value="WhatsApp Marketing" className="dark:bg-transparent dark:border-gray-700 dark:text-white">
               WhatsApp Marketing
             </option>
 
-            <option value="Video Editing">
+            <option value="Video Editing" className="dark:bg-transparent dark:border-gray-700 dark:text-white">
               Video Editing
             </option>
 
-            <option value="Google Business Profile">
+            <option value="Google Business Profile" className="dark:bg-transparent dark:border-gray-700 dark:text-white">
               Google Business Profile
             </option>
 
-            <option value="Social Media Management">
+            <option value="Social Media Management" className="dark:bg-transparent dark:border-gray-700 dark:text-white">
               Social Media Management
             </option>
 
-            <option value="Other">
+            <option value="Other" className="dark:bg-transparent dark:border-gray-700 dark:text-white">
               Other
             </option>
           </select>
@@ -175,7 +175,7 @@ function Contact() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Location */}
           <div>
-            <label className="block text-sm font-medium mb-1.5">
+            <label className="block text-sm font-medium mb-1.5 ">
               City / Location
             </label>
 
@@ -183,13 +183,13 @@ function Contact() {
               type="text"
               name="location"
               placeholder="e.g. Delhi, India"
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 transition"
+              className="w-full px-4 py-2.5 dark:bg-transparent dark:border-gray-700 dark:text-white rounded-lg border border-gray-300 outline-none focus:border-red-900 focus:ring-2 focus:ring-red-900 transition"
             />
           </div>
 
           {/* Company */}
           <div>
-            <label className="block text-sm font-medium mb-1.5">
+            <label className="block dark:text-white text-sm font-medium mb-1.5">
               Company / Business Name
             </label>
 
@@ -197,14 +197,14 @@ function Contact() {
               type="text"
               name="company"
               placeholder="Your company name"
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 transition"
+              className="w-full   dark:border-gray-700 dark:text-white px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-red-900 focus:ring-2 focus:ring-red-900 transition"
             />
           </div>
         </div>
 
         {/* Message */}
         <div>
-          <label className="block text-sm font-medium mb-1.5">
+          <label className="block dark:text-white text-black text-sm font-medium mb-1.5">
             Tell Me About Your Project *
           </label>
 
@@ -213,7 +213,7 @@ function Contact() {
             rows="5"
             placeholder="Tell me about your project, requirements, goals or budget..."
             required
-            className="w-full px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 transition resize-none"
+            className="dark:placeholder:text-gray-300 placeholder:text-gray-600 dark:border-gray-700 dark:text-white w-full px-4 py-2.5 rounded-lg border border-gray-300 outline-none focus:border-red-900 focus:ring-2 focus:ring-red-900 transition resize-none"
           ></textarea>
         </div>
 
@@ -222,7 +222,7 @@ function Contact() {
           <button
             type="submit"
             disabled={result === "Sending..."}
-            className="px-8 py-2.5 rounded-full bg-black text-white cursor-pointer hover:bg-red-800 disabled:opacity-60 disabled:cursor-not-allowed transition duration-300 font-medium"
+            className="px-8   dark:bg-red-900 dark:border-gray-700 dark:text-white py-2.5 rounded-full bg-black text-white cursor-pointer hover:bg-red-800 dark:hover:bg-gray-900 disabled:opacity-60 disabled:cursor-not-allowed transition duration-300 font-medium"
           >
             {result === "Sending..." ? "Sending..." : "Send Message"}
           </button>

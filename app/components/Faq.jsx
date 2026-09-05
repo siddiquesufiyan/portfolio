@@ -61,11 +61,11 @@ function Faq() {
           Frequently Asked Questions
         </span>
 
-        <h2 className="mt-2 text-3xl md:text-4xl font-semibold text-gray-900">
+        <h2 className="mt-2 dark:text-white text-3xl md:text-4xl font-semibold text-gray-900">
           Why Work With Me?
         </h2>
 
-        <p className="mt-3 text-sm md:text-base text-gray-500 leading-6">
+        <p className="mt-3 text-sm md:text-base text-gray-500 dark:text-gray-200 leading-6">
           Everything you need to know about my services, experience,
           pricing and the way I work.
         </p>
@@ -89,7 +89,7 @@ function Faq() {
                 onClick={() => toggleFAQ(index)}
                 className="w-full flex items-center justify-between gap-4 p-5 text-left"
               >
-                <span className="font-medium text-gray-800 text-sm md:text-base">
+                <span className="font-medium dark:text-gray-200 text-gray-800 text-sm md:text-base">
                   {faq.question}
                 </span>
 
@@ -116,7 +116,7 @@ function Faq() {
                 }`}
               >
                 <div className="overflow-hidden">
-                  <p className="px-5 pb-5 text-sm text-gray-500 leading-6">
+                  <p className="px-5 pb-5 text-sm dark:text-gray-200 text-gray-500 leading-6">
                     {faq.answer}
                   </p>
                 </div>

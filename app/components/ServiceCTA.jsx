@@ -6,7 +6,7 @@ function ServiceCTA({
   description = "Get professional-quality digital services at affordable freelancer pricing. Whether you need a website, SEO, ads, design, or marketing, let's find the right solution for your business.",
 }) {
   return (
-    <section className="w-full py-10 px-6 md:px-10 ">
+    <section className="w-full py-10 px-6 md:px-10 mb-2 md:mb-10">
       <div className="relative overflow-hidden bg-slate-900  px-6 py-10 md:px-10 md:py-12 text-center">
         
         {/* Background Glow */}

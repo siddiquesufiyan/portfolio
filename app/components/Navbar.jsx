@@ -4,7 +4,7 @@ import { assets } from "@/assets/assets";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-
+import { useTheme } from "./ThemeProvider";
 // React Icons
 import {
   FiSearch,
@@ -26,7 +26,7 @@ function Navbar() {
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const [isScroll, setIsScroll] = useState(false);
-
+const { isDarkMode, toggleTheme } = useTheme();
   // Services dropdown reference
   const servicesRef = useRef(null);
 
@@ -160,7 +160,7 @@ function Navbar() {
       {/* ========================================
           HEADER BACKGROUND
       ========================================= */}
-      <div className="fixed top-0 left-0 -z-10 w-full pointer-events-none">
+      <div className="fixed top-0 left-0 -z-10 w-full pointer-events-none dark:hidden">
         <Image
           src={assets.header_bg_color}
           alt=""
@@ -198,10 +198,11 @@ function Navbar() {
 
             transition-all
             duration-300
+             dark:bg-darkTheme
 
             ${
               isScroll
-                ? "bg-white/80 shadow-[0_1px_3px_rgba(0,0,0,0.05)]"
+                ? "bg-white/80 dark:text-white shadow-[0_1px_3px_rgba(0,0,0,0.06)]"
                 : "bg-white/80"
             }
           `}
@@ -224,6 +225,9 @@ function Navbar() {
                 lg:w-14
                 xl:w-[60px]
                 h-auto
+                dark:bg-white
+    dark:rounded-[10px]
+    dark:p-1
                 object-contain
               "
               priority
@@ -247,7 +251,7 @@ function Navbar() {
 
               transition-all
               duration-300
-
+                 dark:border dark:border-white/50 dark:bg-transparent
               ${
                 isScroll
                   ? "bg-transparent border-transparent"
@@ -580,6 +584,7 @@ function Navbar() {
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Theme Button */}
             <button
+            onClick={toggleTheme}
               type="button"
               aria-label="Toggle dark mode"
               className="
@@ -596,11 +601,12 @@ function Navbar() {
 
                 border
                 border-gray-200
-
+                  dark:bg-black/70
+                  dark:text-white
                 bg-white/70
 
                 hover:bg-gray-100
-
+                dark:hover:bg-black
                 cursor-pointer
 
                 transition-all
@@ -608,7 +614,7 @@ function Navbar() {
               "
             >
               <Image
-                src={assets.moon_icon}
+                src={isDarkMode ? assets.sun_icon : assets.moon_icon}
                 alt=""
                 className="w-4 sm:w-5"
               />
@@ -740,7 +746,7 @@ function Navbar() {
           top-0
           right-0
           z-[70]
-
+          dark:text-black
           h-dvh
 
           w-[300px]

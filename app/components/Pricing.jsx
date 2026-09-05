@@ -113,12 +113,12 @@ function ServicesPricing() {
           Services & Pricing
         </p>
 
-        <h2 className="text-2xl md:text-4xl font-semibold text-gray-900">
+        <h2 className="text-2xl md:text-4xl dark:text-white font-semibold text-gray-900">
           Professional Services at{" "}
           <span className="text-red-600">Flexible Prices</span>
         </h2>
 
-        <p className="mt-3 text-sm md:text-base text-gray-500 leading-6">
+        <p className="mt-3 text-sm md:text-base dark:text-gray-200 text-gray-500 leading-6">
           Choose the services you need. Final pricing may vary depending on
           your project requirements and scope.
         </p>
@@ -156,8 +156,8 @@ function ServicesPricing() {
 
       {/* Bottom Note */}
       <div className="mt-8 text-center">
-        <p className="text-xs md:text-sm text-gray-500">
-          <span className="font-medium text-gray-700">
+        <p className="text-xs md:text-sm text-gray-500 dark:text-gray-200">
+          <span className="font-medium text-gray-700 dark:text-gray-200">
             Note:
           </span>{" "}
           Advertising budget, hosting, domain, paid tools and other third-party

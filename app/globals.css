@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-lightHover: #fff1f1;
   --color-darkHover: #3b0a0a;
@@ -9,12 +11,10 @@
   --shadow-white: 4px 4px 0 #fff;
 }
 
-/* Default font */
 * {
   font-family: var(--font-outfit);
 }
 
-/* Headings */
 h1,
 h2,
 h3,
@@ -24,23 +24,19 @@ h6 {
   font-family: var(--font-outfit);
 }
 
-/* Paragraph */
 p {
   font-family: var(--font-ovo);
   font-weight: 400;
 }
 
-/* Links */
 a {
   font-family: var(--font-outfit);
 }
 
-/* Buttons */
 button {
   font-family: var(--font-outfit);
 }
 
-/* List text */
 li {
   font-family: var(--font-ovo);
   font-weight: 500;

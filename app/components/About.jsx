@@ -24,17 +24,17 @@ function About() {
   <li
   key={index}
   className="border-[0.5px] border-gray-400 rounded-xl p-2 cursor-pointer
-  transition-all duration-300 hover:-translate-y-1 hover:bg-lightHover hover:shadow-black"
+  transition-all duration-300 hover:-translate-y-1 dark:hover:bg-black hover:bg-lightHover hover:shadow-black"
 >
       <div className="text-2xl w-7 mt-1">
         {icon}
       </div>
 
-      <h3 className="my-3 font-semibold text-gray-700 text-sm">
+      <h3 className="my-3 font-semibold dark:text-white  dark:hover:text-white text-gray-700 text-sm">
         {title}
       </h3>
 
-      <p className="text-gray-600 text-xs leading-5">
+      <p className="text-gray-600 text-xs leading-5 dark:text-white">
         {description}
       </p>
     </li>
@@ -56,6 +56,7 @@ function About() {
           title={tool.name}
           className="
             w-9 h-9
+            cursor-pointer
             flex items-center justify-center
             rounded-lg
             bg-red-50

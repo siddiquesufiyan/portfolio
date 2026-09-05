@@ -25,7 +25,8 @@ function Footer() {
     "hover:after:w-full";
 
   return (
-    <footer className="bg-[#0b0b0b] text-white px-2 md:px-8">
+    <footer className="bg-[#0b0b0b] dark:border-t
+  dark:border-gray-700 text-white px-2 md:px-8">
 
       {/* ================= MAIN FOOTER ================= */}
       <div className="w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 xl:px-12 py-12 sm:py-14 lg:py-16">

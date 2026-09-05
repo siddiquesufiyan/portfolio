@@ -77,6 +77,7 @@ function Header() {
           text-sm
           sm:text-base
           md:text-lg
+          dark:text-white
           leading-7
           text-gray-600
           px-2
@@ -121,7 +122,7 @@ function Header() {
           <Image
             src={assets.right_arrow_white}
             alt=""
-            className="w-4"
+            className="w-4 dark:text-white"
           />
         </a>
 
@@ -134,6 +135,8 @@ function Header() {
             py-3
             border
             rounded-full
+            dark:hover:text-black
+            dark:text-white
             border-gray-500
             flex items-center justify-center gap-2
             w-full sm:w-auto
@@ -141,12 +144,12 @@ function Header() {
             transition
           "
         >
-          Download Resume
+          Download Profile
 
           <Image
             src={assets.download_icon}
             alt=""
-            className="w-4"
+            className="w-4 "
           />
         </a>
       </div>

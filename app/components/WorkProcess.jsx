@@ -57,11 +57,11 @@ function WorkProcess({
           My Process
         </p>
 
-        <h2 className="text-3xl md:text-4xl font-semibold text-gray-900">
+        <h2 className="text-3xl md:text-4xl dark:text-white font-semibold text-gray-900">
           {title}
         </h2>
 
-        <p className="text-gray-500 text-sm md:text-base mt-3 max-w-xl mx-auto">
+        <p className="text-gray-500 dark:text-gray-200 text-sm md:text-base mt-3 max-w-xl mx-auto">
           {subtitle}
         </p>
       </div>

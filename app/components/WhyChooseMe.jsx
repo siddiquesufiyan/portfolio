@@ -73,11 +73,11 @@ function WhyChooseMe() {
           Why Choose Me
         </span>
 
-        <h2 className="mt-2 text-3xl md:text-4xl font-semibold text-gray-900">
+        <h2 className="mt-2 text-3xl dark:text-white md:text-4xl font-semibold text-gray-900">
           Professional Work Without the Agency Cost
         </h2>
 
-        <p className="mt-4 text-sm md:text-base text-gray-500 leading-7">
+        <p className="mt-4 text-sm md:text-base dark:text-gray-200 text-gray-500 leading-7">
           Get the experience and quality of professional digital services,
           while enjoying the flexibility, direct communication and pricing
           advantages of working with a freelancer.
@@ -119,11 +119,11 @@ function WhyChooseMe() {
       {/* Services */}
       <div className="max-w-5xl mx-auto mt-12">
         <div className="text-center mb-6">
-          <h3 className="text-xl md:text-2xl font-semibold text-gray-900">
+          <h3 className="text-xl md:text-2xl dark:text-white font-semibold text-gray-900">
             Almost Everything Your Business Needs Online
           </h3>
 
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-200">
             From building your online presence to marketing and creative work.
           </p>
         </div>
@@ -201,17 +201,17 @@ function WhyChooseMe() {
       {/* Experience */}
       <div className="max-w-3xl mx-auto mt-8 text-center">
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-3">
-          <span className="flex items-center gap-2 text-sm text-gray-600">
-            <FaCheckCircle className="text-red-600" />
+          <span className="flex items-center dark:text-gray-200 gap-2 text-sm text-gray-600">
+            <FaCheckCircle className="text-red-600 " />
             4+ Years Experience
           </span>
 
-          <span className="flex items-center gap-2 text-sm text-gray-600">
+          <span className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-200">
             <FaCheckCircle className="text-red-600" />
             Experience With Companies & Agencies
           </span>
 
-          <span className="flex items-center gap-2 text-sm text-gray-600">
+          <span className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-200">
             <FaCheckCircle className="text-red-600" />
             Multiple Industry Experience
           </span>

@@ -32,7 +32,7 @@ function AboutHero() {
           </h1>
 
           {/* SEO Description */}
-          <p className="max-w-2xl mx-auto mt-6 text-sm sm:text-base md:text-lg leading-7 md:leading-8 text-gray-600">
+          <p className="max-w-2xl dark:text-white mx-auto mt-6 text-sm sm:text-base md:text-lg leading-7 md:leading-8 text-gray-600">
             I help businesses, startups and brands build a strong online
             presence through professional website design, SEO, social media
             marketing, Facebook Ads, WhatsApp marketing and other digital

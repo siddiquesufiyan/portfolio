@@ -61,11 +61,11 @@ function Testimonials({ reviews = defaultReviews }) {
           Client Reviews
         </p>
 
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900">
+        <h2 className="text-2xl sm:text-3xl dark:text-white md:text-4xl font-semibold text-gray-900">
           What My Clients Say
         </h2>
 
-        <p className="text-gray-500 text-xs sm:text-sm md:text-base mt-2 sm:mt-3 px-2">
+        <p className="text-gray-500 text-xs dark:text-gray-200 sm:text-sm md:text-base mt-2 sm:mt-3 px-2">
           Feedback from clients and businesses I have worked with.
         </p>
       </div>
