@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "motion/react";
 import {
   FaComments,
   FaClipboardList,
@@ -50,12 +53,27 @@ function WorkProcess({
   steps = defaultSteps,
 }) {
   return (
-    <section className="w-full py-10 sm:py-12">
-      {/* Heading */}
-      <div className="text-center mb-10 sm:mb-12 px-4">
-        <p className="text-red-600 text-sm font-medium mb-2">
+    <section className="w-full py-10 sm:py-12 overflow-hidden">
+      {/* HEADING */}
+      <motion.div
+        className="text-center mb-10 sm:mb-12 px-4"
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{
+          duration: 0.5,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+      >
+        <motion.p
+          className="text-red-600 text-sm font-medium mb-2"
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.35 }}
+        >
           My Process
-        </p>
+        </motion.p>
 
         <h2 className="text-3xl md:text-4xl dark:text-white font-semibold text-gray-900">
           {title}
@@ -64,12 +82,23 @@ function WorkProcess({
         <p className="text-gray-500 dark:text-gray-200 text-sm md:text-base mt-3 max-w-xl mx-auto leading-6">
           {subtitle}
         </p>
-      </div>
+      </motion.div>
 
-      {/* Timeline */}
+      {/* TIMELINE */}
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 md:px-0">
-        {/* Desktop Line */}
-        <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-200 -translate-x-1/2" />
+        {/* DESKTOP TIMELINE LINE */}
+        <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-200 -translate-x-1/2 overflow-hidden">
+          <motion.div
+            className="absolute top-0 left-0 w-full bg-red-600 origin-top"
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{
+              duration: 1.5,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          />
+        </div>
 
         <div className="space-y-5 sm:space-y-6 md:space-y-0">
           {steps.map((step, index) => {
@@ -77,54 +106,163 @@ function WorkProcess({
             const isLeft = index % 2 === 0;
 
             return (
-              <div
+              <motion.div
                 key={index}
                 className="relative md:grid md:grid-cols-2 md:gap-12 md:min-h-[150px]"
+                initial={{
+                  opacity: 0,
+                  x: isLeft ? -35 : 35,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                viewport={{
+                  once: true,
+                  amount: 0.25,
+                }}
+                transition={{
+                  duration: 0.55,
+                  delay: index * 0.08,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
               >
-                {/* Left / Right Content */}
+                {/* CONTENT */}
                 <div
                   className={`w-full ${
-                    isLeft
-                      ? "md:text-right"
-                      : "md:col-start-2"
+                    isLeft ? "md:text-right" : "md:col-start-2"
                   }`}
                 >
-                  <div
-                    className={`w-full border border-gray-200 rounded-2xl p-4 sm:p-5 bg-white hover:border-red-200 hover:shadow-sm transition-all duration-300 ${
-                      isLeft ? "" : "md:ml-0"
-                    }`}
+                  <motion.div
+                    className={`
+                      group
+                      w-full
+                      border
+                      border-gray-200
+                      rounded-2xl
+                      p-4
+                      sm:p-5
+                      bg-white
+                      hover:border-red-200
+                      hover:shadow-[0_10px_30px_rgba(239,68,68,0.08)]
+                      transition-all
+                      duration-300
+                      ${isLeft ? "" : "md:ml-0"}
+                    `}
+                    whileHover={{
+                      y: -5,
+                      scale: 1.01,
+                    }}
+                    transition={{
+                      duration: 0.25,
+                      ease: "easeOut",
+                    }}
                   >
-                    {/* Card Header */}
+                    {/* CARD HEADER */}
                     <div
                       className={`flex items-center gap-3 mb-3 ${
-                        isLeft
-                          ? "md:justify-end"
-                          : ""
+                        isLeft ? "md:justify-end" : ""
                       }`}
                     >
-                      <span className="text-red-600 text-sm font-bold shrink-0">
+                      <motion.span
+                        className="text-red-600 text-sm font-bold shrink-0"
+                        initial={{ opacity: 0, scale: 0.7 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          duration: 0.3,
+                          delay: index * 0.08 + 0.15,
+                        }}
+                      >
                         {step.number}
-                      </span>
+                      </motion.span>
 
-                      <Icon className="text-red-600 text-lg shrink-0" />
+                      <motion.div
+                        className="text-red-600 text-lg shrink-0"
+                        whileHover={{
+                          rotate: [0, -8, 8, 0],
+                        }}
+                        transition={{
+                          duration: 0.35,
+                        }}
+                      >
+                        <Icon />
+                      </motion.div>
 
                       <h3 className="font-semibold text-gray-800 dark:text-gray-900 text-sm sm:text-base leading-5">
                         {step.title}
                       </h3>
                     </div>
 
-                    {/* Description */}
+                    {/* DESCRIPTION */}
                     <p className="text-sm text-gray-500 leading-6">
                       {step.description}
                     </p>
-                  </div>
+
+                    {/* SMALL HOVER LINE */}
+                    <motion.div
+                      className="h-[2px] bg-red-600 rounded-full mt-4 origin-left"
+                      initial={{ scaleX: 0 }}
+                      whileHover={{ scaleX: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  </motion.div>
                 </div>
 
-                {/* Center Circle - Desktop Only */}
-                <div className="hidden md:flex absolute left-1/2 top-8 -translate-x-1/2 w-8 h-8 rounded-full bg-red-600 border-4 border-white shadow-sm items-center justify-center">
-                  <span className="w-2 h-2 bg-white rounded-full" />
-                </div>
-              </div>
+                {/* CENTER DOT */}
+                <motion.div
+                  className="
+                    hidden
+                    md:flex
+                    absolute
+                    left-1/2
+                    top-8
+                    -translate-x-1/2
+                    w-8
+                    h-8
+                    rounded-full
+                    bg-red-600
+                    border-4
+                    border-white
+                    shadow-sm
+                    items-center
+                    justify-center
+                    z-10
+                  "
+                  initial={{
+                    opacity: 0,
+                    scale: 0,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                    amount: 0.3,
+                  }}
+                  transition={{
+                    duration: 0.35,
+                    delay: index * 0.08 + 0.15,
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 18,
+                  }}
+                >
+                  <motion.span
+                    className="w-2 h-2 bg-white rounded-full"
+                    animate={{
+                      scale: [1, 1.35, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: index * 0.15,
+                    }}
+                  />
+                </motion.div>
+              </motion.div>
             );
           })}
         </div>

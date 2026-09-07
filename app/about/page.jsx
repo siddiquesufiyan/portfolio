@@ -9,9 +9,10 @@ export default function AboutPage() {
   return (
     <>
     <AboutHero/>
+      <ClientStats/>
      <About/>
       <WorkProcess/>
-     <ClientStats/>
+   
     <Testimonials/>
     <Faq/>
     <ServiceCTA/>

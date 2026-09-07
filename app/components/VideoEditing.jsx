@@ -216,7 +216,7 @@ function VideoEditing() {
 
                 <button
                   onClick={() => setActiveService("basic")}
-                  className={`flex-1 rounded-lg px-3 py-2 text-xs sm:text-sm transition ${
+                  className={`flex-1 cursor-pointer rounded-lg px-3 py-2 text-xs sm:text-sm transition ${
                     activeService === "basic"
                       ? "bg-white text-gray-950"
                       : "text-gray-400 hover:text-white"
@@ -227,7 +227,7 @@ function VideoEditing() {
 
                 <button
                   onClick={() => setActiveService("ai")}
-                  className={`flex-1 rounded-lg px-3 py-2 text-xs sm:text-sm transition ${
+                  className={`flex-1  cursor-pointer rounded-lg px-3 py-2 text-xs sm:text-sm transition ${
                     activeService === "ai"
                       ? "bg-red-600 text-white"
                       : "text-gray-400 hover:text-white"
