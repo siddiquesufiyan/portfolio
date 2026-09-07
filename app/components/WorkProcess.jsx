@@ -50,9 +50,9 @@ function WorkProcess({
   steps = defaultSteps,
 }) {
   return (
-    <section className="w-full py-12">
+    <section className="w-full py-10 sm:py-12">
       {/* Heading */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-10 sm:mb-12 px-4">
         <p className="text-red-600 text-sm font-medium mb-2">
           My Process
         </p>
@@ -61,17 +61,17 @@ function WorkProcess({
           {title}
         </h2>
 
-        <p className="text-gray-500 dark:text-gray-200 text-sm md:text-base mt-3 max-w-xl mx-auto">
+        <p className="text-gray-500 dark:text-gray-200 text-sm md:text-base mt-3 max-w-xl mx-auto leading-6">
           {subtitle}
         </p>
       </div>
 
       {/* Timeline */}
-      <div className="relative max-w-4xl mx-auto">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 md:px-0">
         {/* Desktop Line */}
         <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-200 -translate-x-1/2" />
 
-        <div className="space-y-8 md:space-y-0">
+        <div className="space-y-5 sm:space-y-6 md:space-y-0">
           {steps.map((step, index) => {
             const Icon = step.icon;
             const isLeft = index % 2 === 0;
@@ -81,40 +81,46 @@ function WorkProcess({
                 key={index}
                 className="relative md:grid md:grid-cols-2 md:gap-12 md:min-h-[150px]"
               >
-                {/* Left */}
+                {/* Left / Right Content */}
                 <div
-                  className={`${
-                    isLeft ? "md:text-right" : "md:col-start-2"
+                  className={`w-full ${
+                    isLeft
+                      ? "md:text-right"
+                      : "md:col-start-2"
                   }`}
                 >
                   <div
-                    className={`border border-gray-200 rounded-2xl p-5 bg-white hover:border-red-200 hover:shadow-sm transition-all duration-300 ${
+                    className={`w-full border border-gray-200 rounded-2xl p-4 sm:p-5 bg-white hover:border-red-200 hover:shadow-sm transition-all duration-300 ${
                       isLeft ? "" : "md:ml-0"
                     }`}
                   >
+                    {/* Card Header */}
                     <div
                       className={`flex items-center gap-3 mb-3 ${
-                        isLeft ? "md:justify-end" : ""
+                        isLeft
+                          ? "md:justify-end"
+                          : ""
                       }`}
                     >
-                      <span className="text-red-600 text-sm font-bold">
+                      <span className="text-red-600 text-sm font-bold shrink-0">
                         {step.number}
                       </span>
 
-                      <Icon className="text-red-600 text-lg" />
+                      <Icon className="text-red-600 text-lg shrink-0" />
 
-                      <h3 className="font-semibold text-gray-800">
+                      <h3 className="font-semibold text-gray-800 dark:text-gray-900 text-sm sm:text-base leading-5">
                         {step.title}
                       </h3>
                     </div>
 
+                    {/* Description */}
                     <p className="text-sm text-gray-500 leading-6">
                       {step.description}
                     </p>
                   </div>
                 </div>
 
-                {/* Center Circle */}
+                {/* Center Circle - Desktop Only */}
                 <div className="hidden md:flex absolute left-1/2 top-8 -translate-x-1/2 w-8 h-8 rounded-full bg-red-600 border-4 border-white shadow-sm items-center justify-center">
                   <span className="w-2 h-2 bg-white rounded-full" />
                 </div>

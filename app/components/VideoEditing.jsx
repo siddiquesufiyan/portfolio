@@ -973,7 +973,7 @@ function VideoEditing() {
               <div className="relative h-[300px] sm:h-[380px] lg:h-full min-h-[460px]">
 
                 <Image
-                  src="/video-editing.webp"
+                  src="/video-editing.png"
                   alt="Video Editing Services"
                   fill
                   className="object-cover object-center"

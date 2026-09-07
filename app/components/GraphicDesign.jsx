@@ -568,7 +568,7 @@ function GraphicDesign() {
               <div className="relative h-[300px] sm:h-[380px] lg:h-full min-h-[460px]">
 
                 <Image
-                  src="/graphic-design.webp"
+                  src="/graphic-design.png"
                   alt="Graphic Design Services"
                   fill
                   className="object-cover object-center"

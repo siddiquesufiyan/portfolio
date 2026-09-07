@@ -190,40 +190,40 @@ function WebsiteDesign() {
 
   const projects = [
     {
-      image: "/website-1.webp",
-      category: "Business Website",
-      title: "Modern Business Website",
+      image: "/first.png",
+      category: "Multi-Industry Website",
+      title: "Business & E-commerce Websites",
       description:
-        "A professional responsive website designed to present services and generate enquiries.",
-    },
+    "Modern responsive websites designed for businesses, restaurants, fashion brands, furniture stores and online products."
+},
+  {
+  image: "/second.png",
+  category: "Multi-Industry Website",
+  title: "Education, Fitness & Lifestyle Websites",
+  description:
+    "Modern responsive websites designed for education, fitness, travel, beauty and lifestyle businesses.",
+},
     {
-      image: "/website-2.webp",
-      category: "Travel Website",
-      title: "Travel & Tourism Website",
-      description:
-        "A visually engaging tourism website with destination-focused sections and enquiry flow.",
-    },
+  image: "/third.png",
+  category: "Multi-Industry Website",
+  title: "Education, Travel & Furniture Websites",
+  description:
+    "Modern responsive websites designed for education, travel, furniture and other growing businesses.",
+},
     {
-      image: "/website-3.webp",
-      category: "Portfolio Website",
-      title: "Personal Portfolio",
-      description:
-        "A clean portfolio website designed for showcasing services, skills and previous work.",
-    },
+  image: "/four.png",
+  category: "Beauty & Modeling",
+  title: "Beauty & Modeling Website",
+  description:
+    "A modern and elegant website designed for beauty brands, models, salons and personal beauty professionals.",
+},
     {
-      image: "/website-4.webp",
-      category: "E-Commerce",
-      title: "Online Store",
-      description:
-        "A modern e-commerce interface designed to showcase products and make online shopping easier.",
-    },
-    {
-      image: "/website-5.webp",
-      category: "Service Business",
-      title: "Service Company Website",
-      description:
-        "A conversion-focused website created to explain services and generate customer enquiries.",
-    },
+  image: "/five.png",
+  category: "Excel Dashboard",
+  title: "Excel Business Dashboard",
+  description:
+    "A professional Excel dashboard designed to organize business data, track performance and present insights clearly.",
+},
   ];
 
   /* =====================================================
@@ -737,7 +737,7 @@ function WebsiteDesign() {
 
               <button
                 onClick={previousProject}
-                className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:border-red-500 hover:text-red-600 transition"
+                className="w-10 h-10 cursor-pointer rounded-full border border-gray-200 dark:border-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:border-red-500 hover:text-red-600 transition"
                 aria-label="Previous project"
               >
                 <FaChevronLeft />
@@ -745,7 +745,7 @@ function WebsiteDesign() {
 
               <button
                 onClick={nextProject}
-                className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:border-red-500 hover:text-red-600 transition"
+                className="w-10 h-10 cursor-pointer rounded-full border border-gray-200 dark:border-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:border-red-500 hover:text-red-600 transition"
                 aria-label="Next project"
               >
                 <FaChevronRight />
@@ -857,7 +857,7 @@ function WebsiteDesign() {
           <div className="relative h-[320px] sm:h-[430px] rounded-2xl overflow-hidden">
 
             <Image
-              src="/website-design.webp"
+              src="/website-6.png"
               alt="Website Design and Development"
               fill
               className="object-cover object-center"

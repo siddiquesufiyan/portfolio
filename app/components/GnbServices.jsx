@@ -877,7 +877,7 @@ function GNBServices() {
               <div className="relative h-[300px] sm:h-[380px] lg:h-full min-h-[460px]">
 
                 <Image
-                  src="/google-business-profile.webp"
+                  src="/google-business-profile.png"
                   alt="Google Business Profile"
                   fill
                   className="object-cover object-center"

@@ -327,7 +327,7 @@ function Footer() {
 
             {/* Start Project */}
             <Link
-              href="#contact"
+              href="/contact"
               className="
                 inline-flex
                 items-center
