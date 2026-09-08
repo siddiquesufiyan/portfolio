@@ -1,8 +1,13 @@
-
 "use client";
 
 import React, { useState } from "react";
 import Image from "next/image";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import {
   FiMapPin,
   FiPhone,
@@ -18,8 +23,100 @@ import {
   FiBarChart2,
 } from "react-icons/fi";
 
+/* =========================================================
+   ANIMATION VARIANTS (mirrored from SeoServices)
+========================================================= */
+
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 35,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const fadeIn = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.7,
+      ease: "easeOut",
+    },
+  },
+};
+
+const scaleIn = {
+  hidden: {
+    opacity: 0,
+    scale: 0.94,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.09,
+    },
+  },
+};
+
+const cardReveal = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+    scale: 0.97,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 function GNBServices() {
   const [activeService, setActiveService] = useState("creation");
+  const shouldReduceMotion = useReducedMotion();
+
+  /* =====================================================
+     SCROLL PROGRESS
+  ====================================================== */
+
+  const { scrollYProgress } = useScroll();
+
+  const heroGlowY = useTransform(
+    scrollYProgress,
+    [0, 0.35],
+    [0, shouldReduceMotion ? 0 : 180]
+  );
+
+  const heroCardY = useTransform(
+    scrollYProgress,
+    [0, 0.4],
+    [0, shouldReduceMotion ? 0 : -60]
+  );
 
   const gnbProcess = [
     {
@@ -145,62 +242,174 @@ function GNBServices() {
   return (
     <>
       {/* =====================================================
+          GLOBAL SCROLL PROGRESS
+      ====================================================== */}
+
+      {!shouldReduceMotion && (
+        <motion.div
+          className="fixed top-0 left-0 right-0 h-[2px] bg-red-600 origin-left z-[9999]"
+          style={{
+            scaleX: scrollYProgress,
+          }}
+        />
+      )}
+
+      {/* =====================================================
           SECTION 1 — HERO + PRICING
       ====================================================== */}
-      <section className="w-full px-4 sm:px-6 md:px-8 lg:px-[8%] py-10 sm:py-14">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
+      <section className="relative w-full overflow-hidden px-4 sm:px-6 md:px-8 lg:px-[8%] py-10 sm:py-14">
+
+        {!shouldReduceMotion && (
+          <motion.div
+            className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-red-500/10 blur-[120px]"
+            style={{
+              y: heroGlowY,
+            }}
+          />
+        )}
+
+        <div className="relative max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
 
           {/* LEFT */}
-          <div>
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 mt-4 md:mt-2 rounded-full bg-red-50 dark:bg-red-950/20 text-red-600 text-xs sm:text-sm font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-600" />
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.25,
+            }}
+          >
+            <motion.span
+              variants={fadeUp}
+              className="inline-flex items-center gap-2 px-3 py-1.5 mt-4 md:mt-2 rounded-full bg-red-50 dark:bg-red-950/20 text-red-600 text-xs sm:text-sm font-medium"
+            >
+              <motion.span
+                className="w-1.5 h-1.5 rounded-full bg-red-600"
+                animate={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        scale: [1, 1.8, 1],
+                        opacity: [1, 0.5, 1],
+                      }
+                }
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
               Google Business Profile Services
-            </span>
+            </motion.span>
 
-            <h1 className="mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 dark:text-white leading-tight">
+            <motion.h1
+              variants={fadeUp}
+              className="mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 dark:text-white leading-tight"
+            >
               Get Your Business
-              <span className="text-red-600"> Found on Google</span>
-            </h1>
+              <motion.span
+                className="text-red-600 inline-block"
+                whileHover={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        x: 4,
+                      }
+                }
+              >
+                {" "}Found on Google
+              </motion.span>
+            </motion.h1>
 
-            <p className="mt-4 text-sm sm:text-base text-gray-600 dark:text-gray-200 leading-7">
+            <motion.p
+              variants={fadeUp}
+              className="mt-4 text-sm sm:text-base text-gray-600 dark:text-gray-200 leading-7"
+            >
               I create and optimize Google Business Profiles for new and
               existing businesses so customers can find your business on
               Google Search and Google Maps.
-            </p>
+            </motion.p>
 
-            <p className="mt-3 text-sm sm:text-base text-gray-600 dark:text-gray-200 leading-7">
+            <motion.p
+              variants={fadeUp}
+              className="mt-3 text-sm sm:text-base text-gray-600 dark:text-gray-200 leading-7"
+            >
               Whether you are opening a new shop, starting a company or
               already have a business profile, I can help you create,
               optimize and improve your Google presence.
-            </p>
+            </motion.p>
 
-            <div className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-gray-700 dark:text-gray-200">
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">✓</span>
-                GNB / GBP Creation
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">✓</span>
-                Google Maps Presence
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">✓</span>
-                Local SEO
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">✓</span>
-                Ranking-Focused Optimization
-              </div>
-            </div>
-          </div>
+            <motion.div
+              variants={staggerContainer}
+              className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-gray-700 dark:text-gray-200"
+            >
+              {[
+                "GNB / GBP Creation",
+                "Google Maps Presence",
+                "Local SEO",
+                "Ranking-Focused Optimization",
+              ].map((item) => (
+                <motion.div
+                  key={item}
+                  variants={fadeUp}
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          x: 5,
+                        }
+                  }
+                  className="flex items-center gap-2"
+                >
+                  <motion.span
+                    className="text-red-600"
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            scale: 1.3,
+                          }
+                    }
+                  >
+                    ✓
+                  </motion.span>
+                  {item}
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
 
           {/* PRICING */}
-          <div className="relative rounded-2xl bg-gray-950 p-7 sm:p-9 overflow-hidden">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.25,
+            }}
+            variants={scaleIn}
+            style={{
+              y: heroCardY,
+            }}
+            className="relative rounded-2xl bg-gray-950 p-7 sm:p-9 overflow-hidden"
+          >
 
-            <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-red-600/20 blur-3xl" />
+            {!shouldReduceMotion && (
+              <motion.div
+                className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-red-600/20 blur-3xl"
+                animate={{
+                  x: [0, 30, 0],
+                  y: [0, 20, 0],
+                  scale: [1, 1.1, 1],
+                }}
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            )}
 
             <div className="absolute -bottom-24 -left-24 w-56 h-56 rounded-full bg-red-600/10 blur-3xl" />
 
@@ -209,7 +418,7 @@ function GNBServices() {
               <div className="flex gap-2 p-1 rounded-xl bg-white/5">
                 <button
                   onClick={() => setActiveService("creation")}
-                  className={`flex-1 rounded-lg px-3 py-2 text-xs sm:text-sm transition ${
+                  className={`flex-1  cursor-pointer rounded-lg px-3 py-2 text-xs sm:text-sm transition ${
                     activeService === "creation"
                       ? "bg-white text-gray-950"
                       : "text-gray-400 hover:text-white"
@@ -220,7 +429,7 @@ function GNBServices() {
 
                 <button
                   onClick={() => setActiveService("seo")}
-                  className={`flex-1 rounded-lg px-3 py-2 text-xs sm:text-sm transition ${
+                  className={`flex-1 cursor-pointer rounded-lg px-3 py-2 text-xs sm:text-sm transition ${
                     activeService === "seo"
                       ? "bg-red-600 text-white"
                       : "text-gray-400 hover:text-white"
@@ -230,85 +439,171 @@ function GNBServices() {
                 </button>
               </div>
 
-              {activeService === "creation" ? (
-                <div className="mt-7">
+              <motion.div
+                key={activeService}
+                initial={{
+                  opacity: 0,
+                  y: 12,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  duration: 0.45,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                {activeService === "creation" ? (
+                  <div className="mt-7">
 
-                  <p className="text-sm text-gray-400">
-                    Google Business Profile Creation
-                  </p>
+                    <p className="text-sm text-gray-400">
+                      Google Business Profile Creation
+                    </p>
 
-                  <div className="mt-2 flex items-end gap-2">
-                    <span className="text-4xl sm:text-5xl font-semibold text-white">
-                      ₹1,000
-                    </span>
+                    <div className="mt-2 flex items-end gap-2">
+                      <motion.span
+                        className="text-4xl sm:text-5xl font-semibold text-white"
+                        initial={{
+                          opacity: 0,
+                          scale: 0.8,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          scale: 1,
+                        }}
+                        transition={{
+                          duration: 0.7,
+                          delay: 0.15,
+                          type: "spring",
+                          stiffness: 100,
+                        }}
+                      >
+                        ₹1,000
+                      </motion.span>
 
-                    <span className="mb-1 text-gray-400 text-sm">
-                      one-time
-                    </span>
+                      <span className="mb-1 text-gray-400 text-sm">
+                        one-time
+                      </span>
+                    </div>
+
+                    <p className="mt-2 text-xs text-gray-500">
+                      Perfect for new shops, companies and local businesses.
+                    </p>
+
+                    <div className="mt-5 h-px bg-gray-800" />
+
+                    <h2 className="mt-6 text-xl font-semibold text-white">
+                      What's Included?
+                    </h2>
+
+                    <motion.ul
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="visible"
+                      className="mt-5 space-y-3 text-sm text-gray-300"
+                    >
+                      {creationFeatures.map((item) => (
+                        <motion.li
+                          key={item}
+                          initial={{
+                            opacity: 0,
+                            x: -15,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            x: 0,
+                          }}
+                          transition={{
+                            duration: 0.4,
+                          }}
+                          className="flex items-start gap-3"
+                        >
+                          <span className="text-red-500 mt-0.5">
+                            <FiCheck />
+                          </span>
+                          {item}
+                        </motion.li>
+                      ))}
+                    </motion.ul>
+
                   </div>
+                ) : (
+                  <div className="mt-7">
 
-                  <p className="mt-2 text-xs text-gray-500">
-                    Perfect for new shops, companies and local businesses.
-                  </p>
+                    <p className="text-sm text-gray-400">
+                      Google Business Profile SEO
+                    </p>
 
-                  <div className="mt-5 h-px bg-gray-800" />
+                    <div className="mt-2 flex items-end gap-2">
+                      <motion.span
+                        className="text-4xl sm:text-5xl font-semibold text-red-500"
+                        initial={{
+                          opacity: 0,
+                          scale: 0.8,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          scale: 1,
+                        }}
+                        transition={{
+                          duration: 0.7,
+                          delay: 0.15,
+                          type: "spring",
+                          stiffness: 100,
+                        }}
+                      >
+                        ₹2,500
+                      </motion.span>
 
-                  <h2 className="mt-6 text-xl font-semibold text-white">
-                    What's Included?
-                  </h2>
+                      <span className="mb-1 text-gray-400 text-sm">
+                        / month
+                      </span>
+                    </div>
 
-                  <ul className="mt-5 space-y-3 text-sm text-gray-300">
-                    {creationFeatures.map((item) => (
-                      <li key={item} className="flex items-start gap-3">
-                        <span className="text-red-500 mt-0.5">
-                          <FiCheck />
-                        </span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
+                    <p className="mt-2 text-xs text-gray-500">
+                      Monthly local SEO & profile optimization.
+                    </p>
 
-                </div>
-              ) : (
-                <div className="mt-7">
+                    <div className="mt-5 h-px bg-gray-800" />
 
-                  <p className="text-sm text-gray-400">
-                    Google Business Profile SEO
-                  </p>
+                    <h2 className="mt-6 text-xl font-semibold text-white">
+                      What's Included?
+                    </h2>
 
-                  <div className="mt-2 flex items-end gap-2">
-                    <span className="text-4xl sm:text-5xl font-semibold text-red-500">
-                      ₹2,500
-                    </span>
+                    <motion.ul
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="visible"
+                      className="mt-5 space-y-3 text-sm text-gray-300"
+                    >
+                      {seoFeatures.map((item) => (
+                        <motion.li
+                          key={item}
+                          initial={{
+                            opacity: 0,
+                            x: -15,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            x: 0,
+                          }}
+                          transition={{
+                            duration: 0.4,
+                          }}
+                          className="flex items-start gap-3"
+                        >
+                          <span className="text-red-500 mt-0.5">
+                            <FiCheck />
+                          </span>
+                          {item}
+                        </motion.li>
+                      ))}
+                    </motion.ul>
 
-                    <span className="mb-1 text-gray-400 text-sm">
-                      / month
-                    </span>
                   </div>
-
-                  <p className="mt-2 text-xs text-gray-500">
-                    Monthly local SEO & profile optimization.
-                  </p>
-
-                  <div className="mt-5 h-px bg-gray-800" />
-
-                  <h2 className="mt-6 text-xl font-semibold text-white">
-                    What's Included?
-                  </h2>
-
-                  <ul className="mt-5 space-y-3 text-sm text-gray-300">
-                    {seoFeatures.map((item) => (
-                      <li key={item} className="flex items-start gap-3">
-                        <span className="text-red-500 mt-0.5">
-                          <FiCheck />
-                        </span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-
-                </div>
-              )}
+                )}
+              </motion.div>
 
               <div className="mt-6 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
                 <p className="text-xs text-gray-400 leading-5">
@@ -322,7 +617,7 @@ function GNBServices() {
               </div>
 
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -336,7 +631,15 @@ function GNBServices() {
           <div className="grid lg:grid-cols-2 gap-8 items-center">
 
             {/* CONTENT */}
-            <div>
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: true,
+                amount: 0.2,
+              }}
+            >
               <span className="text-red-600 text-sm font-medium">
                 Google Business Profile
               </span>
@@ -351,7 +654,15 @@ function GNBServices() {
                 discover your business and take action.
               </p>
 
-              <div className="mt-6 space-y-3">
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{
+                  once: true,
+                }}
+                className="mt-6 space-y-3"
+              >
                 {[
                   "Appear on Google Search",
                   "Show your business on Google Maps",
@@ -359,20 +670,52 @@ function GNBServices() {
                   "Show services and business information",
                   "Make it easier for customers to contact you",
                 ].map((item) => (
-                  <div
+                  <motion.div
                     key={item}
+                    variants={fadeUp}
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 5,
+                          }
+                    }
                     className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"
                   >
                     <span className="text-red-600">✓</span>
                     {item}
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
 
             {/* GOOGLE STYLE CARD */}
-            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm overflow-hidden">
+            <motion.div
+              initial={{
+                opacity: 0,
+                x: 50,
+              }}
+              whileInView={{
+                opacity: 1,
+                x: 0,
+              }}
+              viewport={{
+                once: true,
+                amount: 0.2,
+              }}
+              transition={{
+                duration: 0.8,
+              }}
+              whileHover={
+                shouldReduceMotion
+                  ? {}
+                  : {
+                      y: -5,
+                    }
+              }
+              className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm overflow-hidden"
+            >
 
               {/* SEARCH BAR */}
               <div className="p-4 border-b border-gray-200 dark:border-gray-800">
@@ -452,7 +795,7 @@ function GNBServices() {
                 </div>
 
               </div>
-            </div>
+            </motion.div>
 
           </div>
         </div>
@@ -466,7 +809,15 @@ function GNBServices() {
 
         <div className="max-w-6xl mx-auto">
 
-          <div className="max-w-2xl mb-10 sm:mb-12">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            className="max-w-2xl mb-10 sm:mb-12"
+          >
 
             <span className="text-red-600 text-sm font-medium">
               My GNB Process
@@ -481,15 +832,50 @@ function GNBServices() {
               from initial setup to ongoing local SEO.
             </p>
 
-          </div>
+          </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.1,
+            }}
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
 
-            {gnbProcess.map((step) => (
-              <div
+            {gnbProcess.map((step, index) => (
+              <motion.div
                 key={step.number}
-                className="group relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-red-300 dark:hover:border-red-900"
+                variants={cardReveal}
+                whileHover={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        y: -7,
+                      }
+                }
+                className="group relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 sm:p-6 overflow-hidden transition-colors duration-300 hover:border-red-200 dark:hover:border-red-900"
               >
+
+                {/* Animated progress line */}
+                <motion.div
+                  initial={{
+                    scaleX: 0,
+                  }}
+                  whileInView={{
+                    scaleX: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    duration: 0.8,
+                    delay: index * 0.08,
+                  }}
+                  className="absolute top-0 left-0 right-0 h-[2px] bg-red-600 origin-left"
+                />
 
                 <div className="flex items-center justify-between">
 
@@ -497,9 +883,18 @@ function GNBServices() {
                     {step.number}
                   </span>
 
-                  <span className="text-red-600">
+                  <motion.span
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 6,
+                          }
+                    }
+                    className="text-red-600 text-lg"
+                  >
                     →
-                  </span>
+                  </motion.span>
 
                 </div>
 
@@ -511,10 +906,10 @@ function GNBServices() {
                   {step.description}
                 </p>
 
-              </div>
+              </motion.div>
             ))}
 
-          </div>
+          </motion.div>
 
         </div>
 
@@ -528,7 +923,15 @@ function GNBServices() {
 
         <div className="max-w-6xl mx-auto">
 
-          <div className="text-center max-w-2xl mx-auto">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            className="text-center max-w-2xl mx-auto"
+          >
 
             <span className="text-red-600 text-sm font-medium">
               Choose Your Service
@@ -544,13 +947,29 @@ function GNBServices() {
               maintain your local visibility.
             </p>
 
-          </div>
+          </motion.div>
 
 
           <div className="mt-10 grid md:grid-cols-2 gap-5">
 
             {/* CREATION */}
-            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 p-6 sm:p-8 bg-white dark:bg-gray-900">
+            <motion.div
+              variants={cardReveal}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: true,
+                amount: 0.2,
+              }}
+              whileHover={
+                shouldReduceMotion
+                  ? {}
+                  : {
+                      y: -6,
+                    }
+              }
+              className="rounded-2xl border border-gray-200 dark:border-gray-800 p-6 sm:p-8 bg-white dark:bg-gray-900"
+            >
 
               <div className="flex items-center justify-between">
 
@@ -575,25 +994,69 @@ function GNBServices() {
                 their Google Business Profile created and properly configured.
               </p>
 
-              <div className="mt-6 space-y-3">
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{
+                  once: true,
+                }}
+                className="mt-6 space-y-3"
+              >
                 {creationFeatures.map((item) => (
-                  <div
+                  <motion.div
                     key={item}
+                    variants={fadeUp}
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 4,
+                          }
+                    }
                     className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"
                   >
                     <span className="text-red-600">✓</span>
                     {item}
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
 
-            </div>
+            </motion.div>
 
 
             {/* SEO */}
-            <div className="relative rounded-2xl bg-gray-950 p-6 sm:p-8 overflow-hidden">
+            <motion.div
+              variants={cardReveal}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: true,
+                amount: 0.2,
+              }}
+              whileHover={
+                shouldReduceMotion
+                  ? {}
+                  : {
+                      y: -6,
+                    }
+              }
+              className="relative rounded-2xl bg-gray-950 p-6 sm:p-8 overflow-hidden"
+            >
 
-              <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-red-600/20 blur-3xl" />
+              {!shouldReduceMotion && (
+                <motion.div
+                  className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-red-600/20 blur-3xl"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+              )}
 
               <div className="relative z-10">
 
@@ -620,21 +1083,37 @@ function GNBServices() {
                   their local Google visibility and ranking potential.
                 </p>
 
-                <div className="mt-6 space-y-3">
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{
+                    once: true,
+                  }}
+                  className="mt-6 space-y-3"
+                >
                   {seoFeatures.map((item) => (
-                    <div
+                    <motion.div
                       key={item}
+                      variants={fadeUp}
+                      whileHover={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              x: 4,
+                            }
+                      }
                       className="flex items-center gap-3 text-sm text-gray-300"
                     >
                       <span className="text-red-500">✓</span>
                       {item}
-                    </div>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
 
               </div>
 
-            </div>
+            </motion.div>
 
           </div>
 
@@ -650,7 +1129,15 @@ function GNBServices() {
 
         <div className="max-w-6xl mx-auto">
 
-          <div className="max-w-2xl">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            className="max-w-2xl"
+          >
 
             <span className="text-red-600 text-sm font-medium">
               What I Optimize
@@ -665,19 +1152,36 @@ function GNBServices() {
               continuous optimization to build a stronger local presence.
             </p>
 
-          </div>
+          </motion.div>
 
 
-          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.1,
+            }}
+            className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          >
 
             {profileServices.map((service, index) => {
 
               const Icon = service.icon;
 
               return (
-                <div
+                <motion.div
                   key={service.title}
-                  className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-red-300 dark:hover:border-red-900 bg-white dark:bg-gray-900"
+                  variants={cardReveal}
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          y: -7,
+                        }
+                  }
+                  className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-5 transition-colors duration-300 hover:border-red-300 dark:hover:border-red-900 bg-white dark:bg-gray-900"
                 >
 
                   <div className="flex items-center justify-between">
@@ -686,7 +1190,17 @@ function GNBServices() {
                       {String(index + 1).padStart(2, "0")}
                     </span>
 
-                    <Icon className="text-xl text-gray-500 group-hover:text-red-600 transition" />
+                    <motion.span
+                      whileHover={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              scale: 1.15,
+                            }
+                      }
+                    >
+                      <Icon className="text-xl text-gray-500 group-hover:text-red-600 transition" />
+                    </motion.span>
 
                   </div>
 
@@ -698,15 +1212,24 @@ function GNBServices() {
                     {service.description}
                   </p>
 
-                  <div className="mt-5 text-red-600 group-hover:translate-x-1 transition-transform">
+                  <motion.div
+                    className="mt-5 text-red-600"
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 6,
+                          }
+                    }
+                  >
                     →
-                  </div>
+                  </motion.div>
 
-                </div>
+                </motion.div>
               );
             })}
 
-          </div>
+          </motion.div>
 
         </div>
 
@@ -721,7 +1244,15 @@ function GNBServices() {
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12">
 
           {/* LEFT */}
-          <div>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+          >
 
             <span className="text-red-600 text-sm font-medium">
               Why Google Business Profile?
@@ -740,7 +1271,15 @@ function GNBServices() {
               business information when searching on Google.
             </p>
 
-            <div className="mt-7 grid sm:grid-cols-2 gap-3">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: true,
+              }}
+              className="mt-7 grid sm:grid-cols-2 gap-3"
+            >
 
               {[
                 "Google Search visibility",
@@ -750,64 +1289,139 @@ function GNBServices() {
                 "Directions",
                 "Business enquiries",
               ].map((item) => (
-                <div
+                <motion.div
                   key={item}
+                  variants={cardReveal}
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          x: 4,
+                        }
+                  }
                   className="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-800 p-3.5 bg-white dark:bg-gray-900"
                 >
-                  <span className="w-5 h-5 rounded-full bg-red-50 dark:bg-red-950/40 text-red-600 flex items-center justify-center text-xs">
+                  <motion.span
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            scale: 1.15,
+                          }
+                    }
+                    className="w-5 h-5 rounded-full bg-red-50 dark:bg-red-950/40 text-red-600 flex items-center justify-center text-xs"
+                  >
                     ✓
-                  </span>
+                  </motion.span>
 
                   <span className="text-sm text-gray-700 dark:text-gray-300">
                     {item}
                   </span>
-                </div>
+                </motion.div>
               ))}
 
-            </div>
+            </motion.div>
 
-          </div>
+          </motion.div>
 
 
           {/* RIGHT */}
-          <div className="rounded-2xl bg-gray-950 p-6 sm:p-8">
+          <motion.div
+            initial={{
+              opacity: 0,
+              x: 50,
+            }}
+            whileInView={{
+              opacity: 1,
+              x: 0,
+            }}
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+            transition={{
+              duration: 0.8,
+            }}
+            whileHover={
+              shouldReduceMotion
+                ? {}
+                : {
+                    y: -5,
+                  }
+            }
+            className="relative rounded-2xl bg-gray-950 p-6 sm:p-8 overflow-hidden"
+          >
 
-            <p className="text-sm text-red-500 font-medium">
-              Who Needs It?
-            </p>
+            {!shouldReduceMotion && (
+              <motion.div
+                className="absolute -right-20 -top-20 w-56 h-56 rounded-full bg-red-600/10 blur-3xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            )}
 
-            <h3 className="mt-2 text-2xl sm:text-3xl font-semibold text-white">
-              Perfect for Local Businesses
-            </h3>
+            <div className="relative">
 
-            <p className="mt-3 text-sm text-gray-400 leading-6">
-              Whether you are opening a new business or already operating
-              locally, a properly managed Google Business Profile can support
-              your online presence.
-            </p>
+              <p className="text-sm text-red-500 font-medium">
+                Who Needs It?
+              </p>
 
-            <div className="mt-7 grid grid-cols-2 gap-3">
+              <h3 className="mt-2 text-2xl sm:text-3xl font-semibold text-white">
+                Perfect for Local Businesses
+              </h3>
 
-              {businesses.map((business) => (
-                <div
-                  key={business}
-                  className="rounded-xl border border-gray-800 p-4"
-                >
+              <p className="mt-3 text-sm text-gray-400 leading-6">
+                Whether you are opening a new business or already operating
+                locally, a properly managed Google Business Profile can support
+                your online presence.
+              </p>
 
-                  <span className="text-red-500 text-sm">
-                    ✓
-                  </span>
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{
+                  once: true,
+                }}
+                className="mt-7 grid grid-cols-2 gap-3"
+              >
 
-                  <p className="mt-2 text-sm text-gray-300">
-                    {business}
-                  </p>
+                {businesses.map((business) => (
+                  <motion.div
+                    key={business}
+                    variants={fadeUp}
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 4,
+                          }
+                    }
+                    className="rounded-xl border border-gray-800 p-4"
+                  >
 
-                </div>
-              ))}
+                    <span className="text-red-500 text-sm">
+                      ✓
+                    </span>
+
+                    <p className="mt-2 text-sm text-gray-300">
+                      {business}
+                    </p>
+
+                  </motion.div>
+                ))}
+
+              </motion.div>
 
             </div>
 
-          </div>
+          </motion.div>
 
         </div>
 
@@ -819,7 +1433,25 @@ function GNBServices() {
       ====================================================== */}
       <section className="w-full px-4 sm:px-6 md:px-8 lg:px-[8%] pb-14 sm:pb-20 pt-12">
 
-        <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 40,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="max-w-6xl mx-auto"
+        >
 
           <div className="relative overflow-hidden rounded-2xl bg-gray-950">
 
@@ -828,9 +1460,22 @@ function GNBServices() {
               {/* CONTENT */}
               <div className="p-7 sm:p-9 lg:p-12">
 
-                <span className="inline-flex px-3 py-1.5 rounded-full bg-red-500/10 text-red-400 text-xs sm:text-sm">
+                <motion.span
+                  initial={{
+                    opacity: 0,
+                    scale: 0.9,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  className="inline-flex px-3 py-1.5 rounded-full bg-red-500/10 text-red-400 text-xs sm:text-sm"
+                >
                   Local Business Growth
-                </span>
+                </motion.span>
 
                 <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-semibold text-white leading-tight">
                   Opening a New Business?
@@ -845,7 +1490,15 @@ function GNBServices() {
                   start building your local presence.
                 </p>
 
-                <div className="mt-6 space-y-3">
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{
+                    once: true,
+                  }}
+                  className="mt-6 space-y-3"
+                >
 
                   {[
                     "GNB / GBP Creation — ₹1,000",
@@ -854,40 +1507,112 @@ function GNBServices() {
                     "Direct communication",
                     "Creation + ongoing optimization",
                   ].map((item) => (
-                    <div
+                    <motion.div
                       key={item}
+                      variants={fadeUp}
+                      whileHover={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              x: 5,
+                            }
+                      }
                       className="flex items-center gap-3 text-sm text-gray-300"
                     >
                       <span className="text-red-500">✓</span>
                       {item}
-                    </div>
+                    </motion.div>
                   ))}
 
-                </div>
+                </motion.div>
 
-                <button className="mt-7 inline-flex items-center gap-2 rounded-xl bg-red-600 px-5 py-3 text-sm font-medium text-white hover:bg-red-700 transition">
+                <motion.button
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          scale: 1.04,
+                        }
+                  }
+                  whileTap={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          scale: 0.97,
+                        }
+                  }
+                  className="mt-7 inline-flex items-center gap-2 rounded-xl bg-red-600 px-5 py-3 text-sm font-medium text-white hover:bg-red-700 transition"
+                >
                   Get Started
                   <FiArrowUpRight />
-                </button>
+                </motion.button>
 
               </div>
 
 
               {/* GOOGLE IMAGE */}
-              <div className="relative h-[300px] sm:h-[380px] lg:h-full min-h-[460px]">
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  x: 50,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                viewport={{
+                  once: true,
+                  amount: 0.2,
+                }}
+                transition={{
+                  duration: 0.8,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="relative h-[300px] sm:h-[380px] lg:h-full min-h-[460px]"
+              >
 
-                <Image
-                  src="/google-business-profile.png"
-                  alt="Google Business Profile"
-                  fill
-                  className="object-cover object-center"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
+                <motion.div
+                  className="absolute inset-0"
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          scale: 1.03,
+                        }
+                  }
+                  transition={{
+                    duration: 0.6,
+                  }}
+                >
+                  <Image
+                    src="/google-business-profile.png"
+                    alt="Google Business Profile"
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </motion.div>
 
                 <div className="absolute inset-0 bg-gray-950/25" />
 
                 {/* FLOATING PROFILE CARD */}
-                <div className="absolute bottom-6 left-5 right-5 sm:left-8 sm:right-8 rounded-xl bg-white/95 backdrop-blur p-4 shadow-xl">
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: 20,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    delay: 0.35,
+                  }}
+                  className="absolute bottom-6 left-5 right-5 sm:left-8 sm:right-8 rounded-xl bg-white/95 backdrop-blur p-4 shadow-xl"
+                >
 
                   <div className="flex items-center justify-between">
 
@@ -896,33 +1621,86 @@ function GNBServices() {
                         Google Business Profile
                       </p>
 
-                      <p className="mt-1 text-xl font-semibold text-gray-900">
+                      <motion.p
+                        className="mt-1 text-xl font-semibold text-gray-900"
+                        initial={{
+                          opacity: 0,
+                          scale: 0.8,
+                        }}
+                        whileInView={{
+                          opacity: 1,
+                          scale: 1,
+                        }}
+                        viewport={{
+                          once: true,
+                        }}
+                        transition={{
+                          duration: 0.6,
+                          delay: 0.5,
+                          type: "spring",
+                          stiffness: 120,
+                        }}
+                      >
                         Ready to Grow ↗
-                      </p>
+                      </motion.p>
                     </div>
 
-                    <div className="text-red-600 text-2xl">
+                    <motion.div
+                      animate={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              y: [0, -4, 0],
+                            }
+                      }
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="text-red-600 text-2xl"
+                    >
                       <FiTrendingUp />
-                    </div>
+                    </motion.div>
 
                   </div>
 
                   <div className="mt-4 flex gap-1">
-                    <div className="h-2 flex-1 rounded-full bg-red-600" />
-                    <div className="h-2 flex-1 rounded-full bg-red-500" />
-                    <div className="h-2 flex-1 rounded-full bg-red-400" />
-                    <div className="h-2 flex-1 rounded-full bg-gray-200" />
+                    {[
+                      "bg-red-600",
+                      "bg-red-500",
+                      "bg-red-400",
+                      "bg-gray-200",
+                    ].map((color, i) => (
+                      <motion.div
+                        key={color + i}
+                        initial={{
+                          scaleX: 0,
+                        }}
+                        whileInView={{
+                          scaleX: 1,
+                        }}
+                        viewport={{
+                          once: true,
+                        }}
+                        transition={{
+                          duration: 0.6,
+                          delay: 0.4 + i * 0.1,
+                        }}
+                        className={`h-2 flex-1 rounded-full origin-left ${color}`}
+                      />
+                    ))}
                   </div>
 
-                </div>
+                </motion.div>
 
-              </div>
+              </motion.div>
 
             </div>
 
           </div>
 
-        </div>
+        </motion.div>
 
       </section>
     </>
@@ -930,4 +1708,3 @@ function GNBServices() {
 }
 
 export default GNBServices;
-

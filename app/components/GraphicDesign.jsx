@@ -1,4 +1,12 @@
+"use client";
+
 import Image from "next/image";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import {
   FiArrowUpRight,
   FiCheck,
@@ -12,7 +20,100 @@ import {
   FiBriefcase,
 } from "react-icons/fi";
 
+/* =========================================================
+   ANIMATION VARIANTS (mirrored from SeoServices / GnbServices / VideoEditing)
+========================================================= */
+
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 35,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const fadeIn = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.7,
+      ease: "easeOut",
+    },
+  },
+};
+
+const scaleIn = {
+  hidden: {
+    opacity: 0,
+    scale: 0.94,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.09,
+    },
+  },
+};
+
+const cardReveal = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+    scale: 0.97,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 function GraphicDesign() {
+  const shouldReduceMotion = useReducedMotion();
+
+  /* =====================================================
+     SCROLL PROGRESS
+  ====================================================== */
+
+  const { scrollYProgress } = useScroll();
+
+  const heroGlowY = useTransform(
+    scrollYProgress,
+    [0, 0.35],
+    [0, shouldReduceMotion ? 0 : 180]
+  );
+
+  const heroCardY = useTransform(
+    scrollYProgress,
+    [0, 0.4],
+    [0, shouldReduceMotion ? 0 : -60]
+  );
+
   const designProcess = [
     {
       number: "01",
@@ -126,64 +227,176 @@ function GraphicDesign() {
   return (
     <>
       {/* =====================================================
+          GLOBAL SCROLL PROGRESS
+      ====================================================== */}
+
+      {!shouldReduceMotion && (
+        <motion.div
+          className="fixed top-0 left-0 right-0 h-[2px] bg-red-600 origin-left z-[9999]"
+          style={{
+            scaleX: scrollYProgress,
+          }}
+        />
+      )}
+
+      {/* =====================================================
           SECTION 1 — HERO + PRICING
       ====================================================== */}
-      <section className="w-full px-4 sm:px-6 md:px-8 lg:px-[8%] py-10 sm:py-14">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
+      <section className="relative w-full overflow-hidden px-4 sm:px-6 md:px-8 lg:px-[8%] py-10 sm:py-14">
+
+        {!shouldReduceMotion && (
+          <motion.div
+            className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-red-500/10 blur-[120px]"
+            style={{
+              y: heroGlowY,
+            }}
+          />
+        )}
+
+        <div className="relative max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
 
           {/* LEFT CONTENT */}
-          <div>
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 mt-4 md:mt-2 rounded-full bg-red-50 dark:bg-red-950/20 text-red-600 text-xs sm:text-sm font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-600" />
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.25,
+            }}
+          >
+            <motion.span
+              variants={fadeUp}
+              className="inline-flex items-center gap-2 px-3 py-1.5 mt-4 md:mt-2 rounded-full bg-red-50 dark:bg-red-950/20 text-red-600 text-xs sm:text-sm font-medium"
+            >
+              <motion.span
+                className="w-1.5 h-1.5 rounded-full bg-red-600"
+                animate={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        scale: [1, 1.8, 1],
+                        opacity: [1, 0.5, 1],
+                      }
+                }
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
               Graphic Design Services
-            </span>
+            </motion.span>
 
-            <h1 className="mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 dark:text-white leading-tight">
+            <motion.h1
+              variants={fadeUp}
+              className="mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 dark:text-white leading-tight"
+            >
               Creative Designs That Make Your
-              <span className="text-red-600"> Business Stand Out</span>
-            </h1>
+              <motion.span
+                className="text-red-600 inline-block"
+                whileHover={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        x: 4,
+                      }
+                }
+              >
+                {" "}Business Stand Out
+              </motion.span>
+            </motion.h1>
 
-            <p className="mt-4 text-sm sm:text-base text-gray-600 dark:text-gray-200 leading-7">
+            <motion.p
+              variants={fadeUp}
+              className="mt-4 text-sm sm:text-base text-gray-600 dark:text-gray-200 leading-7"
+            >
               I create professional and affordable graphic designs for
               businesses, professionals, employees, events and personal
               requirements.
-            </p>
+            </motion.p>
 
-            <p className="mt-3 text-sm sm:text-base text-gray-600 dark:text-gray-200 leading-7">
+            <motion.p
+              variants={fadeUp}
+              className="mt-3 text-sm sm:text-base text-gray-600 dark:text-gray-200 leading-7"
+            >
               Whether you need a logo, visiting card, wedding invitation,
               flyer, brochure, business profile, presentation or certificate,
               you can get it designed according to your requirements.
-            </p>
+            </motion.p>
 
             {/* FEATURES */}
-            <div className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-gray-700 dark:text-gray-200">
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">✓</span>
-                Logo & Brand Design
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">✓</span>
-                Cards & Invitations
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">✓</span>
-                Flyers & Brochures
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">✓</span>
-                Business Designs
-              </div>
-            </div>
-          </div>
+            <motion.div
+              variants={staggerContainer}
+              className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-gray-700 dark:text-gray-200"
+            >
+              {[
+                "Logo & Brand Design",
+                "Cards & Invitations",
+                "Flyers & Brochures",
+                "Business Designs",
+              ].map((item) => (
+                <motion.div
+                  key={item}
+                  variants={fadeUp}
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          x: 5,
+                        }
+                  }
+                  className="flex items-center gap-2"
+                >
+                  <motion.span
+                    className="text-red-600"
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            scale: 1.3,
+                          }
+                    }
+                  >
+                    ✓
+                  </motion.span>
+                  {item}
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
 
           {/* PRICING CARD */}
-          <div className="relative rounded-2xl bg-gray-950 p-7 sm:p-9 overflow-hidden">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.25,
+            }}
+            variants={scaleIn}
+            style={{
+              y: heroCardY,
+            }}
+            className="relative rounded-2xl bg-gray-950 p-7 sm:p-9 overflow-hidden"
+          >
 
             {/* RED DECORATION */}
-            <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-red-600/20 blur-3xl" />
+            {!shouldReduceMotion && (
+              <motion.div
+                className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-red-600/20 blur-3xl"
+                animate={{
+                  x: [0, 30, 0],
+                  y: [0, 20, 0],
+                  scale: [1, 1.1, 1],
+                }}
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            )}
 
             <div className="absolute -bottom-24 -left-24 w-56 h-56 rounded-full bg-red-600/10 blur-3xl" />
 
@@ -194,9 +407,28 @@ function GraphicDesign() {
               </p>
 
               <div className="mt-2 flex items-end gap-2">
-                <span className="text-4xl sm:text-5xl font-semibold text-white">
+                <motion.span
+                  className="text-4xl sm:text-5xl font-semibold text-white"
+                  initial={{
+                    opacity: 0,
+                    scale: 0.8,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    duration: 0.7,
+                    delay: 0.2,
+                    type: "spring",
+                    stiffness: 100,
+                  }}
+                >
                   ₹300
-                </span>
+                </motion.span>
 
                 <span className="mb-1 text-gray-400 text-sm">
                   / design
@@ -218,7 +450,15 @@ function GraphicDesign() {
                 requirements of your design.
               </p>
 
-              <ul className="mt-5 space-y-3 text-sm text-gray-300">
+              <motion.ul
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{
+                  once: true,
+                }}
+                className="mt-5 space-y-3 text-sm text-gray-300"
+              >
                 {[
                   "Custom design according to your requirement",
                   "Professional & clean layout",
@@ -227,14 +467,31 @@ function GraphicDesign() {
                   "High-quality final output",
                   "Direct freelancer communication",
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-3">
+                  <motion.li
+                    key={item}
+                    initial={{
+                      opacity: 0,
+                      x: -15,
+                    }}
+                    whileInView={{
+                      opacity: 1,
+                      x: 0,
+                    }}
+                    viewport={{
+                      once: true,
+                    }}
+                    transition={{
+                      duration: 0.4,
+                    }}
+                    className="flex items-start gap-3"
+                  >
                     <span className="text-red-500 mt-0.5">
                       <FiCheck />
                     </span>
                     {item}
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
+              </motion.ul>
 
               <div className="mt-6 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
                 <p className="text-xs text-gray-400 leading-5">
@@ -246,7 +503,7 @@ function GraphicDesign() {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -257,7 +514,15 @@ function GraphicDesign() {
       <section className="w-full px-4 sm:px-6 md:px-8 lg:px-[8%] py-12 sm:py-16 bg-gray-50 dark:bg-gray-950/50">
         <div className="max-w-6xl mx-auto">
 
-          <div className="max-w-2xl mb-10 sm:mb-12">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            className="max-w-2xl mb-10 sm:mb-12"
+          >
             <span className="text-red-600 text-sm font-medium">
               My Graphic Design Process
             </span>
@@ -271,22 +536,67 @@ function GraphicDesign() {
               what you need, I understand your requirements and create a
               design that fits your purpose.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {designProcess.map((step) => (
-              <div
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.1,
+            }}
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            {designProcess.map((step, index) => (
+              <motion.div
                 key={step.number}
-                className="group relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-red-300 dark:hover:border-red-900"
+                variants={cardReveal}
+                whileHover={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        y: -7,
+                      }
+                }
+                className="group relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 sm:p-6 overflow-hidden transition-colors duration-300 hover:border-red-300 dark:hover:border-red-900"
               >
+
+                {/* Animated progress line */}
+                <motion.div
+                  initial={{
+                    scaleX: 0,
+                  }}
+                  whileInView={{
+                    scaleX: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    duration: 0.8,
+                    delay: index * 0.08,
+                  }}
+                  className="absolute top-0 left-0 right-0 h-[2px] bg-red-600 origin-left"
+                />
+
                 <div className="flex items-center justify-between">
                   <span className="text-2xl sm:text-3xl font-semibold text-gray-700 dark:text-gray-300 group-hover:text-red-600/30 transition">
                     {step.number}
                   </span>
 
-                  <span className="text-red-600 text-lg">
+                  <motion.span
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 6,
+                          }
+                    }
+                    className="text-red-600 text-lg"
+                  >
                     →
-                  </span>
+                  </motion.span>
                 </div>
 
                 <h3 className="mt-5 text-lg font-semibold text-gray-900 dark:text-white">
@@ -296,9 +606,9 @@ function GraphicDesign() {
                 <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
                   {step.description}
                 </p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
         </div>
       </section>
@@ -310,7 +620,15 @@ function GraphicDesign() {
       <section className="w-full px-4 sm:px-6 md:px-8 lg:px-[8%] py-12 sm:py-16">
         <div className="max-w-6xl mx-auto">
 
-          <div className="text-center max-w-2xl mx-auto">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            className="text-center max-w-2xl mx-auto"
+          >
             <span className="text-red-600 text-sm font-medium">
               What I Design
             </span>
@@ -323,23 +641,50 @@ function GraphicDesign() {
               From a simple visiting card to a complete business presentation,
               I can create designs according to your requirement.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.1,
+            }}
+            className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          >
             {services.map((service, index) => {
               const Icon = service.icon;
 
               return (
-                <div
+                <motion.div
                   key={service.title}
-                  className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-red-300 dark:hover:border-red-900 bg-white dark:bg-gray-900"
+                  variants={cardReveal}
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          y: -7,
+                        }
+                  }
+                  className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-5 sm:p-6 transition-colors duration-300 hover:border-red-300 dark:hover:border-red-900 bg-white dark:bg-gray-900"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-red-600 font-semibold">
                       {String(index + 1).padStart(2, "0")}
                     </span>
 
-                    <Icon className="text-xl text-gray-500 group-hover:text-red-600 transition" />
+                    <motion.span
+                      whileHover={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              scale: 1.15,
+                            }
+                      }
+                    >
+                      <Icon className="text-xl text-gray-500 group-hover:text-red-600 transition" />
+                    </motion.span>
                   </div>
 
                   <h3 className="mt-5 text-base font-semibold text-gray-900 dark:text-white">
@@ -350,13 +695,22 @@ function GraphicDesign() {
                     {service.description}
                   </p>
 
-                  <div className="mt-5 text-red-600 group-hover:translate-x-1 transition-transform">
+                  <motion.div
+                    className="mt-5 text-red-600"
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 6,
+                          }
+                    }
+                  >
                     →
-                  </div>
-                </div>
+                  </motion.div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
 
         </div>
       </section>
@@ -369,7 +723,15 @@ function GraphicDesign() {
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12">
 
           {/* LEFT */}
-          <div>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+          >
 
             <span className="text-red-600 text-sm font-medium">
               Why Work With Me?
@@ -393,70 +755,153 @@ function GraphicDesign() {
               contact me for affordable graphic design services.
             </p>
 
-            <div className="mt-7 grid sm:grid-cols-2 gap-3">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: true,
+              }}
+              className="mt-7 grid sm:grid-cols-2 gap-3"
+            >
               {benefits.map((benefit) => (
-                <div
+                <motion.div
                   key={benefit}
+                  variants={cardReveal}
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          x: 4,
+                        }
+                  }
                   className="flex items-start gap-3 rounded-xl border border-gray-200 dark:border-gray-800 p-3.5 bg-white dark:bg-gray-900"
                 >
-                  <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-red-50 dark:bg-red-950/40 text-red-600 flex items-center justify-center text-xs">
+                  <motion.span
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            scale: 1.15,
+                          }
+                    }
+                    className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-red-50 dark:bg-red-950/40 text-red-600 flex items-center justify-center text-xs"
+                  >
                     ✓
-                  </span>
+                  </motion.span>
 
                   <span className="text-sm text-gray-700 dark:text-gray-300">
                     {benefit}
                   </span>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
-          </div>
+          </motion.div>
 
 
           {/* RIGHT */}
-          <div className="rounded-2xl bg-gray-950 p-6 sm:p-8">
+          <motion.div
+            initial={{
+              opacity: 0,
+              x: 50,
+            }}
+            whileInView={{
+              opacity: 1,
+              x: 0,
+            }}
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+            transition={{
+              duration: 0.8,
+            }}
+            whileHover={
+              shouldReduceMotion
+                ? {}
+                : {
+                    y: -5,
+                  }
+            }
+            className="relative rounded-2xl bg-gray-950 p-6 sm:p-8 overflow-hidden"
+          >
 
-            <p className="text-sm text-red-500 font-medium">
-              Design For Everyone
-            </p>
+            {!shouldReduceMotion && (
+              <motion.div
+                className="absolute -right-20 -top-20 w-56 h-56 rounded-full bg-red-600/10 blur-3xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            )}
 
-            <h3 className="mt-2 text-2xl sm:text-3xl font-semibold text-white">
-              Have a Requirement?
-            </h3>
+            <div className="relative">
 
-            <p className="mt-3 text-sm text-gray-400 leading-6">
-              You don't need to be a big company to get professional graphic
-              design. If you have a requirement, I can help you turn your
-              idea into a professional design.
-            </p>
+              <p className="text-sm text-red-500 font-medium">
+                Design For Everyone
+              </p>
 
-            <div className="mt-7 grid grid-cols-2 gap-3">
-              {[
-                "Businesses",
-                "Startups",
-                "Employees",
-                "Professionals",
-                "Students",
-                "Events",
-                "Personal Projects",
-                "Organizations",
-              ].map((type) => (
-                <div
-                  key={type}
-                  className="rounded-xl border border-gray-800 p-4"
-                >
-                  <span className="text-red-500 text-sm">
-                    ✓
-                  </span>
+              <h3 className="mt-2 text-2xl sm:text-3xl font-semibold text-white">
+                Have a Requirement?
+              </h3>
 
-                  <p className="mt-2 text-sm text-gray-300">
-                    {type}
-                  </p>
-                </div>
-              ))}
+              <p className="mt-3 text-sm text-gray-400 leading-6">
+                You don't need to be a big company to get professional graphic
+                design. If you have a requirement, I can help you turn your
+                idea into a professional design.
+              </p>
+
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{
+                  once: true,
+                }}
+                className="mt-7 grid grid-cols-2 gap-3"
+              >
+                {[
+                  "Businesses",
+                  "Startups",
+                  "Employees",
+                  "Professionals",
+                  "Students",
+                  "Events",
+                  "Personal Projects",
+                  "Organizations",
+                ].map((type) => (
+                  <motion.div
+                    key={type}
+                    variants={fadeUp}
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 4,
+                          }
+                    }
+                    className="rounded-xl border border-gray-800 p-4"
+                  >
+                    <span className="text-red-500 text-sm">
+                      ✓
+                    </span>
+
+                    <p className="mt-2 text-sm text-gray-300">
+                      {type}
+                    </p>
+                  </motion.div>
+                ))}
+              </motion.div>
+
             </div>
 
-          </div>
+          </motion.div>
 
         </div>
       </section>
@@ -469,7 +914,15 @@ function GraphicDesign() {
 
         <div className="max-w-6xl mx-auto">
 
-          <div className="max-w-2xl">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            className="max-w-2xl"
+          >
             <span className="text-red-600 text-sm font-medium">
               More Design Services
             </span>
@@ -483,13 +936,30 @@ function GraphicDesign() {
               different requirement, simply contact me and tell me what you
               need.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.1,
+            }}
+            className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          >
             {extraServices.map((service, index) => (
-              <div
+              <motion.div
                 key={service}
-                className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-red-300 dark:hover:border-red-900"
+                variants={cardReveal}
+                whileHover={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        y: -7,
+                      }
+                }
+                className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-5 transition-colors duration-300 hover:border-red-300 dark:hover:border-red-900"
               >
                 <span className="text-xs text-red-600 font-semibold">
                   {String(index + 1).padStart(2, "0")}
@@ -499,12 +969,21 @@ function GraphicDesign() {
                   {service}
                 </h3>
 
-                <div className="mt-5 text-red-600 group-hover:translate-x-1 transition-transform">
+                <motion.div
+                  className="mt-5 text-red-600"
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          x: 6,
+                        }
+                  }
+                >
                   →
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
         </div>
       </section>
@@ -515,7 +994,25 @@ function GraphicDesign() {
       ====================================================== */}
       <section className="w-full px-4 sm:px-6 md:px-8 lg:px-[8%] pb-14 sm:pb-20">
 
-        <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 40,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="max-w-6xl mx-auto"
+        >
 
           <div className="relative overflow-hidden rounded-2xl bg-gray-950">
 
@@ -524,9 +1021,22 @@ function GraphicDesign() {
               {/* CONTENT */}
               <div className="p-7 sm:p-9 lg:p-12">
 
-                <span className="inline-flex px-3 py-1.5 rounded-full bg-red-500/10 text-red-400 text-xs sm:text-sm">
+                <motion.span
+                  initial={{
+                    opacity: 0,
+                    scale: 0.9,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  className="inline-flex px-3 py-1.5 rounded-full bg-red-500/10 text-red-400 text-xs sm:text-sm"
+                >
                   Creative Design
-                </span>
+                </motion.span>
 
                 <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-semibold text-white leading-tight">
                   Your Requirement.
@@ -541,7 +1051,15 @@ function GraphicDesign() {
                   events and everyday requirements.
                 </p>
 
-                <div className="mt-6 space-y-3">
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{
+                    once: true,
+                  }}
+                  className="mt-6 space-y-3"
+                >
                   {[
                     "Logo & brand identity",
                     "Visiting & business cards",
@@ -549,36 +1067,92 @@ function GraphicDesign() {
                     "Business profiles & presentations",
                     "Invitation & certificate designs",
                   ].map((item) => (
-                    <div
+                    <motion.div
                       key={item}
+                      variants={fadeUp}
+                      whileHover={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              x: 5,
+                            }
+                      }
                       className="flex items-center gap-3 text-sm text-gray-300"
                     >
                       <span className="text-red-500">
                         ✓
                       </span>
                       {item}
-                    </div>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
 
               </div>
 
 
               {/* IMAGE */}
-              <div className="relative h-[300px] sm:h-[380px] lg:h-full min-h-[460px]">
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  x: 50,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                viewport={{
+                  once: true,
+                  amount: 0.2,
+                }}
+                transition={{
+                  duration: 0.8,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="relative h-[300px] sm:h-[380px] lg:h-full min-h-[460px]"
+              >
 
-                <Image
-                  src="/graphic-design.png"
-                  alt="Graphic Design Services"
-                  fill
-                  className="object-cover object-center"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
+                <motion.div
+                  className="absolute inset-0"
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          scale: 1.03,
+                        }
+                  }
+                  transition={{
+                    duration: 0.6,
+                  }}
+                >
+                  <Image
+                    src="/graphic-design.png"
+                    alt="Graphic Design Services"
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </motion.div>
 
                 <div className="absolute inset-0 bg-gray-950/30" />
 
                 {/* DESIGN CARD */}
-                <div className="absolute bottom-6 left-5 right-5 sm:left-8 sm:right-8 rounded-xl bg-white/95 backdrop-blur p-4 shadow-xl">
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: 20,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    delay: 0.35,
+                  }}
+                  className="absolute bottom-6 left-5 right-5 sm:left-8 sm:right-8 rounded-xl bg-white/95 backdrop-blur p-4 shadow-xl"
+                >
 
                   <div className="flex items-center justify-between">
 
@@ -587,33 +1161,86 @@ function GraphicDesign() {
                         Graphic Design
                       </p>
 
-                      <p className="mt-1 text-xl font-semibold text-gray-900">
+                      <motion.p
+                        className="mt-1 text-xl font-semibold text-gray-900"
+                        initial={{
+                          opacity: 0,
+                          scale: 0.8,
+                        }}
+                        whileInView={{
+                          opacity: 1,
+                          scale: 1,
+                        }}
+                        viewport={{
+                          once: true,
+                        }}
+                        transition={{
+                          duration: 0.6,
+                          delay: 0.5,
+                          type: "spring",
+                          stiffness: 120,
+                        }}
+                      >
                         Creative & Professional →
-                      </p>
+                      </motion.p>
                     </div>
 
-                    <div className="text-red-600 text-2xl">
+                    <motion.div
+                      animate={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              y: [0, -4, 0],
+                            }
+                      }
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="text-red-600 text-2xl"
+                    >
                       <FiArrowUpRight />
-                    </div>
+                    </motion.div>
 
                   </div>
 
                   <div className="mt-4 flex gap-1">
-                    <div className="h-2 flex-1 rounded-full bg-red-600" />
-                    <div className="h-2 flex-1 rounded-full bg-red-500" />
-                    <div className="h-2 flex-1 rounded-full bg-red-400" />
-                    <div className="h-2 flex-1 rounded-full bg-gray-200" />
+                    {[
+                      "bg-red-600",
+                      "bg-red-500",
+                      "bg-red-400",
+                      "bg-gray-200",
+                    ].map((color, i) => (
+                      <motion.div
+                        key={color + i}
+                        initial={{
+                          scaleX: 0,
+                        }}
+                        whileInView={{
+                          scaleX: 1,
+                        }}
+                        viewport={{
+                          once: true,
+                        }}
+                        transition={{
+                          duration: 0.6,
+                          delay: 0.4 + i * 0.1,
+                        }}
+                        className={`h-2 flex-1 rounded-full origin-left ${color}`}
+                      />
+                    ))}
                   </div>
 
-                </div>
+                </motion.div>
 
-              </div>
+              </motion.div>
 
             </div>
 
           </div>
 
-        </div>
+        </motion.div>
 
       </section>
     </>

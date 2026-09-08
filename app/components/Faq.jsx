@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { FaPlus, FaMinus } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaPlus } from "react-icons/fa";
 
 const faqs = [
   {
@@ -54,12 +55,43 @@ function Faq() {
   };
 
   return (
-    <section className="w-full py-12 px-6 md:px-10">
+    <section className="relative w-full py-16 px-6 md:px-10 overflow-hidden">
+      {/* Subtle moving background */}
+      <motion.div
+        className="absolute -z-10 w-72 h-72 rounded-full bg-red-50 dark:bg-red-950/20 blur-3xl"
+        animate={{
+          x: [-80, 100, -80],
+          y: [-30, 40, -30],
+          scale: [1, 1.15, 1],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
       {/* Heading */}
-      <div className="text-center max-w-2xl mx-auto mb-8">
-        <span className="text-red-600 text-sm font-medium">
+      <motion.div
+        className="text-center max-w-2xl mx-auto mb-10"
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 0.4 }}
+      >
+        <motion.span
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.35,
+            type: "spring",
+            stiffness: 300,
+          }}
+          className="inline-block text-red-600 text-sm font-medium"
+        >
           Frequently Asked Questions
-        </span>
+        </motion.span>
 
         <h2 className="mt-2 dark:text-white text-3xl md:text-4xl font-semibold text-gray-900">
           Why Work With Me?
@@ -69,7 +101,7 @@ function Faq() {
           Everything you need to know about my services, experience,
           pricing and the way I work.
         </p>
-      </div>
+      </motion.div>
 
       {/* FAQ */}
       <div className="max-w-3xl mx-auto space-y-3">
@@ -77,51 +109,222 @@ function Faq() {
           const isOpen = open === index;
 
           return (
-            <div
+            <motion.div
               key={index}
-              className={`border rounded-xl overflow-hidden transition-all duration-300 ${
-                isOpen
-                  ? "border-red-200 shadow-sm"
-                  : "border-gray-200"
-              }`}
+              initial={{
+                opacity: 0,
+                x: index % 2 === 0 ? -18 : 18,
+                scale: 0.98,
+              }}
+              whileInView={{
+                opacity: 1,
+                x: 0,
+                scale: 1,
+              }}
+              viewport={{
+                once: true,
+                amount: 0.15,
+              }}
+              transition={{
+                duration: 0.35,
+                delay: index * 0.035,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              animate={{
+                y: isOpen ? -2 : 0,
+              }}
+              className="relative"
             >
-              <button
-                onClick={() => toggleFAQ(index)}
-                className="w-full flex items-center justify-between gap-4 p-5 text-left"
-              >
-                <span className="font-medium dark:text-gray-200 text-gray-800 text-sm md:text-base">
-                  {faq.question}
-                </span>
-
-                <span
-                  className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
-                    isOpen
-                      ? "bg-red-600 text-white"
-                      : "bg-gray-100 text-gray-600"
-                  }`}
-                >
-                  {isOpen ? (
-                    <FaMinus size={10} className="cursor-pointer"/>
-                  ) : (
-                    <FaPlus size={10} className="cursor-pointer"/>
-                  )}
-                </span>
-              </button>
-
-              <div
-                className={`grid transition-all duration-300 ${
+              <motion.div
+                layout
+                transition={{
+                  layout: {
+                    duration: 0.28,
+                    ease: [0.22, 1, 0.36, 1],
+                  },
+                }}
+                className={`relative overflow-hidden rounded-2xl border bg-white dark:bg-[#111111] ${
                   isOpen
-                    ? "grid-rows-[1fr] opacity-100"
-                    : "grid-rows-[0fr] opacity-0"
+                    ? "border-red-200 dark:border-red-900/60 shadow-lg shadow-red-100/40 dark:shadow-red-950/20"
+                    : "border-gray-200 dark:border-gray-800"
                 }`}
               >
-                <div className="overflow-hidden">
-                  <p className="px-5 pb-5 text-sm dark:text-gray-200 text-gray-500 leading-6">
-                    {faq.answer}
-                  </p>
-                </div>
-              </div>
-            </div>
+                {/* Animated vertical spotlight */}
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{
+                        height: 0,
+                        opacity: 0,
+                      }}
+                      animate={{
+                        height: "100%",
+                        opacity: 1,
+                      }}
+                      exit={{
+                        height: 0,
+                        opacity: 0,
+                      }}
+                      transition={{
+                        duration: 0.3,
+                        ease: "easeOut",
+                      }}
+                      className="absolute left-0 top-0 w-[3px] bg-red-600 rounded-full"
+                    />
+                  )}
+                </AnimatePresence>
+
+                {/* Question */}
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  className="relative w-full cursor-pointer flex items-center gap-4 p-5 md:p-6 text-left"
+                >
+                  {/* Number */}
+                  <motion.div
+                    animate={{
+                      width: isOpen ? 38 : 30,
+                      height: isOpen ? 38 : 30,
+                      backgroundColor: isOpen
+                        ? "rgb(220 38 38)"
+                        : "transparent",
+                      color: isOpen
+                        ? "rgb(255 255 255)"
+                        : "rgb(156 163 175)",
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 350,
+                      damping: 20,
+                    }}
+                    className={`shrink-0 rounded-full flex items-center justify-center text-[10px] font-semibold border ${
+                      isOpen
+                        ? "border-red-600"
+                        : "border-gray-200 dark:border-gray-700"
+                    }`}
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </motion.div>
+
+                  {/* Question */}
+                  <motion.span
+                    animate={{
+                      x: isOpen ? 3 : 0,
+                    }}
+                    transition={{
+                      duration: 0.2,
+                    }}
+                    className={`flex-1 font-medium cursor-pointer text-sm md:text-base ${
+                      isOpen
+                        ? "text-red-600"
+                        : "dark:text-gray-200 text-gray-800"
+                    }`}
+                  >
+                    {faq.question}
+                  </motion.span>
+
+                  {/* Icon */}
+                  <motion.span
+                    animate={{
+                      rotate: isOpen ? 45 : 0,
+                      scale: isOpen ? 1.08 : 1,
+                      backgroundColor: isOpen
+                        ? "rgb(220 38 38)"
+                        : "rgb(243 244 246)",
+                      color: isOpen
+                        ? "rgb(255 255 255)"
+                        : "rgb(75 85 99)",
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 18,
+                    }}
+                    className="shrink-0 w-8  cursor-pointer h-8 rounded-full flex items-center justify-center dark:bg-gray-800"
+                  >
+                    <FaPlus size={10} />
+                  </motion.span>
+                </button>
+
+                {/* Answer */}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{
+                        height: 0,
+                        opacity: 0,
+                      }}
+                      animate={{
+                        height: "auto",
+                        opacity: 1,
+                      }}
+                      exit={{
+                        height: 0,
+                        opacity: 0,
+                      }}
+                      transition={{
+                        height: {
+                          duration: 0.28,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                        opacity: {
+                          duration: 0.18,
+                        },
+                      }}
+                    >
+                      <motion.div
+                        initial={{
+                          y: -8,
+                          clipPath: "inset(0 0 100% 0)",
+                        }}
+                        animate={{
+                          y: 0,
+                          clipPath: "inset(0 0 0% 0)",
+                        }}
+                        exit={{
+                          y: -5,
+                          clipPath: "inset(100% 0 0 0)",
+                        }}
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="px-5 md:px-6 pb-6 pl-[76px] md:pl-[86px]"
+                      >
+                        <div className="h-px w-full bg-gray-100 dark:bg-gray-800 mb-4" />
+
+                        <p className="text-sm cursor-pointer dark:text-gray-300 text-gray-500 leading-7 max-w-2xl">
+                          {faq.answer}
+                        </p>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+
+              {/* Tiny active glow */}
+              <AnimatePresence>
+                {isOpen && (
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      scale: 0.7,
+                    }}
+                    animate={{
+                      opacity: 0.45,
+                      scale: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      scale: 0.7,
+                    }}
+                    transition={{
+                      duration: 0.25,
+                    }}
+                    className="absolute -inset-1 -z-10 rounded-2xl bg-red-200 dark:bg-red-900/20 blur-xl"
+                  />
+                )}
+              </AnimatePresence>
+            </motion.div>
           );
         })}
       </div>

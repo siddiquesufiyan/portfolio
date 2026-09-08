@@ -1,8 +1,13 @@
-
 "use client";
 
 import React, { useState } from "react";
 import Image from "next/image";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import {
   FiCheck,
   FiPlay,
@@ -19,8 +24,100 @@ import {
   FiSmartphone,
 } from "react-icons/fi";
 
+/* =========================================================
+   ANIMATION VARIANTS (mirrored from SeoServices / GnbServices)
+========================================================= */
+
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 35,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const fadeIn = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.7,
+      ease: "easeOut",
+    },
+  },
+};
+
+const scaleIn = {
+  hidden: {
+    opacity: 0,
+    scale: 0.94,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.09,
+    },
+  },
+};
+
+const cardReveal = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+    scale: 0.97,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 function VideoEditing() {
   const [activeService, setActiveService] = useState("basic");
+  const shouldReduceMotion = useReducedMotion();
+
+  /* =====================================================
+     SCROLL PROGRESS
+  ====================================================== */
+
+  const { scrollYProgress } = useScroll();
+
+  const heroGlowY = useTransform(
+    scrollYProgress,
+    [0, 0.35],
+    [0, shouldReduceMotion ? 0 : 180]
+  );
+
+  const heroCardY = useTransform(
+    scrollYProgress,
+    [0, 0.4],
+    [0, shouldReduceMotion ? 0 : -60]
+  );
 
   const editingProcess = [
     {
@@ -147,65 +244,175 @@ function VideoEditing() {
   return (
     <>
       {/* =====================================================
+          GLOBAL SCROLL PROGRESS
+      ====================================================== */}
+
+      {!shouldReduceMotion && (
+        <motion.div
+          className="fixed top-0 left-0 right-0 h-[2px] bg-red-600 origin-left z-[9999]"
+          style={{
+            scaleX: scrollYProgress,
+          }}
+        />
+      )}
+
+      {/* =====================================================
           SECTION 1 — HERO + PRICING
       ====================================================== */}
-      <section className="w-full px-4 sm:px-6 md:px-8 lg:px-[8%] py-10 sm:py-14">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
+      <section className="relative w-full overflow-hidden px-4 sm:px-6 md:px-8 lg:px-[8%] py-10 sm:py-14">
+
+        {!shouldReduceMotion && (
+          <motion.div
+            className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-red-500/10 blur-[120px]"
+            style={{
+              y: heroGlowY,
+            }}
+          />
+        )}
+
+        <div className="relative max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
 
           {/* LEFT CONTENT */}
-          <div>
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 mt-4 md:mt-2 rounded-full bg-red-50 dark:bg-red-950/20 text-red-600 text-xs sm:text-sm font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-600" />
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.25,
+            }}
+          >
+            <motion.span
+              variants={fadeUp}
+              className="inline-flex items-center gap-2 px-3 py-1.5 mt-4 md:mt-2 rounded-full bg-red-50 dark:bg-red-950/20 text-red-600 text-xs sm:text-sm font-medium"
+            >
+              <motion.span
+                className="w-1.5 h-1.5 rounded-full bg-red-600"
+                animate={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        scale: [1, 1.8, 1],
+                        opacity: [1, 0.5, 1],
+                      }
+                }
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
               Video Editing Services
-            </span>
+            </motion.span>
 
-            <h1 className="mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 dark:text-white leading-tight">
+            <motion.h1
+              variants={fadeUp}
+              className="mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-900 dark:text-white leading-tight"
+            >
               Turn Your Raw Footage Into
-              <span className="text-red-600"> Engaging Videos</span>
-            </h1>
+              <motion.span
+                className="text-red-600 inline-block"
+                whileHover={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        x: 4,
+                      }
+                }
+              >
+                {" "}Engaging Videos
+              </motion.span>
+            </motion.h1>
 
-            <p className="mt-4 text-sm sm:text-base text-gray-600 dark:text-gray-200 leading-7">
+            <motion.p
+              variants={fadeUp}
+              className="mt-4 text-sm sm:text-base text-gray-600 dark:text-gray-200 leading-7"
+            >
               I provide affordable video editing services for reels, YouTube
               videos, promotional content, business videos and personal
               projects.
-            </p>
+            </motion.p>
 
-            <p className="mt-3 text-sm sm:text-base text-gray-600 dark:text-gray-200 leading-7">
+            <motion.p
+              variants={fadeUp}
+              className="mt-3 text-sm sm:text-base text-gray-600 dark:text-gray-200 leading-7"
+            >
               From simple video editing to AI-powered video creation, I can
               create content according to your style, platform and
               requirements.
-            </p>
+            </motion.p>
 
-            <div className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-gray-700 dark:text-gray-200">
-
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">✓</span>
-                Reels & Shorts
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">✓</span>
-                YouTube Videos
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">✓</span>
-                Business Videos
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">✓</span>
-                AI Video Creation
-              </div>
-
-            </div>
-          </div>
+            <motion.div
+              variants={staggerContainer}
+              className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-gray-700 dark:text-gray-200"
+            >
+              {[
+                "Reels & Shorts",
+                "YouTube Videos",
+                "Business Videos",
+                "AI Video Creation",
+              ].map((item) => (
+                <motion.div
+                  key={item}
+                  variants={fadeUp}
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          x: 5,
+                        }
+                  }
+                  className="flex items-center gap-2"
+                >
+                  <motion.span
+                    className="text-red-600"
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            scale: 1.3,
+                          }
+                    }
+                  >
+                    ✓
+                  </motion.span>
+                  {item}
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
 
 
           {/* PRICING CARD */}
-          <div className="relative rounded-2xl bg-gray-950 p-7 sm:p-9 overflow-hidden">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.25,
+            }}
+            variants={scaleIn}
+            style={{
+              y: heroCardY,
+            }}
+            className="relative rounded-2xl bg-gray-950 p-7 sm:p-9 overflow-hidden"
+          >
 
-            <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-red-600/20 blur-3xl" />
+            {!shouldReduceMotion && (
+              <motion.div
+                className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-red-600/20 blur-3xl"
+                animate={{
+                  x: [0, 30, 0],
+                  y: [0, 20, 0],
+                  scale: [1, 1.1, 1],
+                }}
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            )}
 
             <div className="absolute -bottom-24 -left-24 w-56 h-56 rounded-full bg-red-600/10 blur-3xl" />
 
@@ -238,105 +445,184 @@ function VideoEditing() {
 
               </div>
 
+              <motion.div
+                key={activeService}
+                initial={{
+                  opacity: 0,
+                  y: 12,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  duration: 0.45,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                {/* BASIC */}
+                {activeService === "basic" ? (
+                  <div className="mt-7">
 
-              {/* BASIC */}
-              {activeService === "basic" ? (
-                <div className="mt-7">
+                    <p className="text-sm text-gray-400">
+                      Basic Video Editing
+                    </p>
 
-                  <p className="text-sm text-gray-400">
-                    Basic Video Editing
-                  </p>
+                    <div className="mt-2 flex items-end gap-2">
 
-                  <div className="mt-2 flex items-end gap-2">
+                      <motion.span
+                        className="text-4xl sm:text-5xl font-semibold text-white"
+                        initial={{
+                          opacity: 0,
+                          scale: 0.8,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          scale: 1,
+                        }}
+                        transition={{
+                          duration: 0.7,
+                          delay: 0.15,
+                          type: "spring",
+                          stiffness: 100,
+                        }}
+                      >
+                        ₹400
+                      </motion.span>
 
-                    <span className="text-4xl sm:text-5xl font-semibold text-white">
-                      ₹400
-                    </span>
+                      <span className="mb-1 text-gray-400 text-sm">
+                        / video
+                      </span>
 
-                    <span className="mb-1 text-gray-400 text-sm">
-                      / video
-                    </span>
+                    </div>
+
+                    <p className="mt-2 text-xs text-gray-500">
+                      Basic editing can go up to ₹1,000 depending on the project.
+                    </p>
+
+                    <div className="mt-5 h-px bg-gray-800" />
+
+                    <h2 className="mt-6 text-xl font-semibold text-white">
+                      What's Included?
+                    </h2>
+
+                    <motion.ul
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="visible"
+                      className="mt-5 space-y-3 text-sm text-gray-300"
+                    >
+
+                      {basicFeatures.map((item) => (
+                        <motion.li
+                          key={item}
+                          initial={{
+                            opacity: 0,
+                            x: -15,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            x: 0,
+                          }}
+                          transition={{
+                            duration: 0.4,
+                          }}
+                          className="flex items-start gap-3"
+                        >
+                          <span className="text-red-500 mt-0.5">
+                            <FiCheck />
+                          </span>
+
+                          {item}
+                        </motion.li>
+                      ))}
+
+                    </motion.ul>
 
                   </div>
+                ) : (
 
-                  <p className="mt-2 text-xs text-gray-500">
-                    Basic editing can go up to ₹1,000 depending on the project.
-                  </p>
+                  /* AI */
+                  <div className="mt-7">
 
-                  <div className="mt-5 h-px bg-gray-800" />
+                    <p className="text-sm text-gray-400">
+                      AI Video Creation
+                    </p>
 
-                  <h2 className="mt-6 text-xl font-semibold text-white">
-                    What's Included?
-                  </h2>
+                    <div className="mt-2 flex items-end gap-2">
 
-                  <ul className="mt-5 space-y-3 text-sm text-gray-300">
-
-                    {basicFeatures.map((item) => (
-                      <li
-                        key={item}
-                        className="flex items-start gap-3"
+                      <motion.span
+                        className="text-4xl sm:text-5xl font-semibold text-red-500"
+                        initial={{
+                          opacity: 0,
+                          scale: 0.8,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          scale: 1,
+                        }}
+                        transition={{
+                          duration: 0.7,
+                          delay: 0.15,
+                          type: "spring",
+                          stiffness: 100,
+                        }}
                       >
-                        <span className="text-red-500 mt-0.5">
-                          <FiCheck />
-                        </span>
+                        ₹600
+                      </motion.span>
 
-                        {item}
-                      </li>
-                    ))}
+                      <span className="mb-1 text-gray-400 text-sm">
+                        / video
+                      </span>
 
-                  </ul>
+                    </div>
 
-                </div>
-              ) : (
+                    <p className="mt-2 text-xs text-gray-500">
+                      AI video projects can range up to ₹2,000 per video.
+                    </p>
 
-                /* AI */
-                <div className="mt-7">
+                    <div className="mt-5 h-px bg-gray-800" />
 
-                  <p className="text-sm text-gray-400">
-                    AI Video Creation
-                  </p>
+                    <h2 className="mt-6 text-xl font-semibold text-white">
+                      What's Included?
+                    </h2>
 
-                  <div className="mt-2 flex items-end gap-2">
+                    <motion.ul
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="visible"
+                      className="mt-5 space-y-3 text-sm text-gray-300"
+                    >
 
-                    <span className="text-4xl sm:text-5xl font-semibold text-red-500">
-                      ₹600
-                    </span>
+                      {aiFeatures.map((item) => (
+                        <motion.li
+                          key={item}
+                          initial={{
+                            opacity: 0,
+                            x: -15,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            x: 0,
+                          }}
+                          transition={{
+                            duration: 0.4,
+                          }}
+                          className="flex items-start gap-3"
+                        >
+                          <span className="text-red-500 mt-0.5">
+                            <FiCheck />
+                          </span>
 
-                    <span className="mb-1 text-gray-400 text-sm">
-                      / video
-                    </span>
+                          {item}
+                        </motion.li>
+                      ))}
+
+                    </motion.ul>
 
                   </div>
-
-                  <p className="mt-2 text-xs text-gray-500">
-                    AI video projects can range up to ₹2,000 per video.
-                  </p>
-
-                  <div className="mt-5 h-px bg-gray-800" />
-
-                  <h2 className="mt-6 text-xl font-semibold text-white">
-                    What's Included?
-                  </h2>
-
-                  <ul className="mt-5 space-y-3 text-sm text-gray-300">
-
-                    {aiFeatures.map((item) => (
-                      <li
-                        key={item}
-                        className="flex items-start gap-3"
-                      >
-                        <span className="text-red-500 mt-0.5">
-                          <FiCheck />
-                        </span>
-
-                        {item}
-                      </li>
-                    ))}
-
-                  </ul>
-
-                </div>
-              )}
+                )}
+              </motion.div>
 
 
               <div className="mt-6 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
@@ -354,7 +640,7 @@ function VideoEditing() {
               </div>
 
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </section>
@@ -370,7 +656,15 @@ function VideoEditing() {
           <div className="grid lg:grid-cols-2 gap-8 items-center">
 
             {/* CONTENT */}
-            <div>
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: true,
+                amount: 0.2,
+              }}
+            >
 
               <span className="text-red-600 text-sm font-medium">
                 Professional Video Editing
@@ -386,7 +680,15 @@ function VideoEditing() {
                 video feels polished and engaging.
               </p>
 
-              <div className="mt-6 space-y-3">
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{
+                  once: true,
+                }}
+                className="mt-6 space-y-3"
+              >
 
                 {[
                   "Clean cuts & professional pacing",
@@ -396,8 +698,16 @@ function VideoEditing() {
                   "Color & visual enhancement",
                   "Platform-ready export",
                 ].map((item) => (
-                  <div
+                  <motion.div
                     key={item}
+                    variants={fadeUp}
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 5,
+                          }
+                    }
                     className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"
                   >
                     <span className="text-red-600">
@@ -405,23 +715,62 @@ function VideoEditing() {
                     </span>
 
                     {item}
-                  </div>
+                  </motion.div>
                 ))}
 
-              </div>
+              </motion.div>
 
-            </div>
+            </motion.div>
 
 
             {/* VIDEO EDITOR UI */}
-            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden shadow-sm">
+            <motion.div
+              initial={{
+                opacity: 0,
+                x: 50,
+              }}
+              whileInView={{
+                opacity: 1,
+                x: 0,
+              }}
+              viewport={{
+                once: true,
+                amount: 0.2,
+              }}
+              transition={{
+                duration: 0.8,
+              }}
+              whileHover={
+                shouldReduceMotion
+                  ? {}
+                  : {
+                      y: -5,
+                    }
+              }
+              className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden shadow-sm"
+            >
 
               {/* TOP BAR */}
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800">
 
                 <div className="flex items-center gap-2">
 
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
+                  <motion.span
+                    className="w-2.5 h-2.5 rounded-full bg-red-500"
+                    animate={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            scale: [1, 1.6, 1],
+                            opacity: [1, 0.5, 1],
+                          }
+                    }
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  />
 
                   <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
                     Video Project
@@ -441,18 +790,71 @@ function VideoEditing() {
 
                 <div className="absolute inset-0 bg-gradient-to-br from-red-950/40 via-gray-950 to-black" />
 
-                <div className="relative z-10 w-16 h-16 rounded-full border border-white/20 bg-white/10 backdrop-blur flex items-center justify-center text-white">
+                <motion.div
+                  className="relative z-10 w-16 h-16 rounded-full border border-white/20 bg-white/10 backdrop-blur flex items-center justify-center text-white"
+                  animate={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          scale: [1, 1.08, 1],
+                        }
+                  }
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          scale: 1.15,
+                        }
+                  }
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
                   <FiPlay className="ml-1 text-xl" />
-                </div>
+                </motion.div>
 
                 {/* FLOATING LABEL */}
-                <div className="absolute top-4 left-4 rounded-lg bg-white/10 backdrop-blur px-3 py-2 text-xs text-white">
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: -10,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    delay: 0.3,
+                  }}
+                  className="absolute top-4 left-4 rounded-lg bg-white/10 backdrop-blur px-3 py-2 text-xs text-white"
+                >
                   Editing Preview
-                </div>
+                </motion.div>
 
-                <div className="absolute bottom-4 right-4 rounded-lg bg-red-600 px-3 py-2 text-xs text-white">
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: 10,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    delay: 0.4,
+                  }}
+                  className="absolute bottom-4 right-4 rounded-lg bg-red-600 px-3 py-2 text-xs text-white"
+                >
                   1080p
-                </div>
+                </motion.div>
 
               </div>
 
@@ -469,27 +871,89 @@ function VideoEditing() {
 
                 <div className="relative h-3 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
 
-                  <div className="absolute left-0 top-0 h-full w-[38%] bg-red-600 rounded-full" />
+                  <motion.div
+                    initial={{
+                      scaleX: 0,
+                    }}
+                    whileInView={{
+                      scaleX: 1,
+                    }}
+                    viewport={{
+                      once: true,
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.1,
+                    }}
+                    className="absolute left-0 top-0 h-full w-[38%] bg-red-600 rounded-full origin-left"
+                  />
 
-                  <div className="absolute left-[42%] top-0 h-full w-[22%] bg-red-400 rounded-full" />
+                  <motion.div
+                    initial={{
+                      scaleX: 0,
+                    }}
+                    whileInView={{
+                      scaleX: 1,
+                    }}
+                    viewport={{
+                      once: true,
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.25,
+                    }}
+                    className="absolute left-[42%] top-0 h-full w-[22%] bg-red-400 rounded-full origin-left"
+                  />
 
-                  <div className="absolute left-[68%] top-0 h-full w-[29%] bg-gray-400 rounded-full" />
+                  <motion.div
+                    initial={{
+                      scaleX: 0,
+                    }}
+                    whileInView={{
+                      scaleX: 1,
+                    }}
+                    viewport={{
+                      once: true,
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.4,
+                    }}
+                    className="absolute left-[68%] top-0 h-full w-[29%] bg-gray-400 rounded-full origin-left"
+                  />
 
                 </div>
 
-                <div className="mt-3 grid grid-cols-3 gap-2">
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{
+                    once: true,
+                  }}
+                  className="mt-3 grid grid-cols-3 gap-2"
+                >
 
-                  <div className="h-8 rounded-md bg-gray-100 dark:bg-gray-800" />
+                  <motion.div
+                    variants={cardReveal}
+                    className="h-8 rounded-md bg-gray-100 dark:bg-gray-800"
+                  />
 
-                  <div className="h-8 rounded-md bg-red-50 dark:bg-red-950/30" />
+                  <motion.div
+                    variants={cardReveal}
+                    className="h-8 rounded-md bg-red-50 dark:bg-red-950/30"
+                  />
 
-                  <div className="h-8 rounded-md bg-gray-100 dark:bg-gray-800" />
+                  <motion.div
+                    variants={cardReveal}
+                    className="h-8 rounded-md bg-gray-100 dark:bg-gray-800"
+                  />
 
-                </div>
+                </motion.div>
 
               </div>
 
-            </div>
+            </motion.div>
 
           </div>
 
@@ -505,7 +969,15 @@ function VideoEditing() {
 
         <div className="max-w-6xl mx-auto">
 
-          <div className="max-w-2xl mb-10 sm:mb-12">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            className="max-w-2xl mb-10 sm:mb-12"
+          >
 
             <span className="text-red-600 text-sm font-medium">
               My Video Editing Process
@@ -520,17 +992,52 @@ function VideoEditing() {
               polished video ready for your audience.
             </p>
 
-          </div>
+          </motion.div>
 
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.1,
+            }}
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
 
-            {editingProcess.map((step) => (
+            {editingProcess.map((step, index) => (
 
-              <div
+              <motion.div
                 key={step.number}
-                className="group relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-red-300 dark:hover:border-red-900"
+                variants={cardReveal}
+                whileHover={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        y: -7,
+                      }
+                }
+                className="group relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 sm:p-6 overflow-hidden transition-colors duration-300 hover:border-red-300 dark:hover:border-red-900"
               >
+
+                {/* Animated progress line */}
+                <motion.div
+                  initial={{
+                    scaleX: 0,
+                  }}
+                  whileInView={{
+                    scaleX: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    duration: 0.8,
+                    delay: index * 0.08,
+                  }}
+                  className="absolute top-0 left-0 right-0 h-[2px] bg-red-600 origin-left"
+                />
 
                 <div className="flex items-center justify-between">
 
@@ -538,9 +1045,18 @@ function VideoEditing() {
                     {step.number}
                   </span>
 
-                  <span className="text-red-600">
+                  <motion.span
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 6,
+                          }
+                    }
+                    className="text-red-600 text-lg"
+                  >
                     →
-                  </span>
+                  </motion.span>
 
                 </div>
 
@@ -552,11 +1068,11 @@ function VideoEditing() {
                   {step.description}
                 </p>
 
-              </div>
+              </motion.div>
 
             ))}
 
-          </div>
+          </motion.div>
 
         </div>
 
@@ -570,7 +1086,15 @@ function VideoEditing() {
 
         <div className="max-w-6xl mx-auto">
 
-          <div className="text-center max-w-2xl mx-auto">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            className="text-center max-w-2xl mx-auto"
+          >
 
             <span className="text-red-600 text-sm font-medium">
               Choose Your Video Service
@@ -586,13 +1110,29 @@ function VideoEditing() {
               AI-assisted visuals and content.
             </p>
 
-          </div>
+          </motion.div>
 
 
           <div className="mt-10 grid md:grid-cols-2 gap-5">
 
             {/* BASIC */}
-            <div className="rounded-2xl border border-gray-200 dark:border-gray-800 p-6 sm:p-8 bg-white dark:bg-gray-900">
+            <motion.div
+              variants={cardReveal}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: true,
+                amount: 0.2,
+              }}
+              whileHover={
+                shouldReduceMotion
+                  ? {}
+                  : {
+                      y: -6,
+                    }
+              }
+              className="rounded-2xl border border-gray-200 dark:border-gray-800 p-6 sm:p-8 bg-white dark:bg-gray-900"
+            >
 
               <div className="flex items-center justify-between">
 
@@ -619,11 +1159,27 @@ function VideoEditing() {
                 editing, cuts, music, captions, transitions and effects.
               </p>
 
-              <div className="mt-6 space-y-3">
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{
+                  once: true,
+                }}
+                className="mt-6 space-y-3"
+              >
 
                 {basicFeatures.map((item) => (
-                  <div
+                  <motion.div
                     key={item}
+                    variants={fadeUp}
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 4,
+                          }
+                    }
                     className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"
                   >
                     <span className="text-red-600">
@@ -631,10 +1187,10 @@ function VideoEditing() {
                     </span>
 
                     {item}
-                  </div>
+                  </motion.div>
                 ))}
 
-              </div>
+              </motion.div>
 
               <div className="mt-6 rounded-xl bg-red-50 dark:bg-red-950/20 p-4">
 
@@ -645,13 +1201,41 @@ function VideoEditing() {
 
               </div>
 
-            </div>
+            </motion.div>
 
 
             {/* AI */}
-            <div className="relative rounded-2xl bg-gray-950 p-6 sm:p-8 overflow-hidden">
+            <motion.div
+              variants={cardReveal}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: true,
+                amount: 0.2,
+              }}
+              whileHover={
+                shouldReduceMotion
+                  ? {}
+                  : {
+                      y: -6,
+                    }
+              }
+              className="relative rounded-2xl bg-gray-950 p-6 sm:p-8 overflow-hidden"
+            >
 
-              <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-red-600/20 blur-3xl" />
+              {!shouldReduceMotion && (
+                <motion.div
+                  className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-red-600/20 blur-3xl"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+              )}
 
               <div className="relative z-10">
 
@@ -680,11 +1264,27 @@ function VideoEditing() {
                   AI-assisted visuals, narration, scenes, scripts or concepts.
                 </p>
 
-                <div className="mt-6 space-y-3">
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{
+                    once: true,
+                  }}
+                  className="mt-6 space-y-3"
+                >
 
                   {aiFeatures.map((item) => (
-                    <div
+                    <motion.div
                       key={item}
+                      variants={fadeUp}
+                      whileHover={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              x: 4,
+                            }
+                      }
                       className="flex items-center gap-3 text-sm text-gray-300"
                     >
                       <span className="text-red-500">
@@ -692,10 +1292,10 @@ function VideoEditing() {
                       </span>
 
                       {item}
-                    </div>
+                    </motion.div>
                   ))}
 
-                </div>
+                </motion.div>
 
                 <div className="mt-6 rounded-xl bg-white/5 border border-white/10 p-4">
 
@@ -708,7 +1308,7 @@ function VideoEditing() {
 
               </div>
 
-            </div>
+            </motion.div>
 
           </div>
 
@@ -724,7 +1324,15 @@ function VideoEditing() {
 
         <div className="max-w-6xl mx-auto">
 
-          <div className="max-w-2xl">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            className="max-w-2xl"
+          >
 
             <span className="text-red-600 text-sm font-medium">
               What I Edit
@@ -739,19 +1347,36 @@ function VideoEditing() {
               different types of videos according to your requirement.
             </p>
 
-          </div>
+          </motion.div>
 
 
-          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.1,
+            }}
+            className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          >
 
             {editingServices.map((service, index) => {
 
               const Icon = service.icon;
 
               return (
-                <div
+                <motion.div
                   key={service.title}
-                  className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-red-300 dark:hover:border-red-900 bg-white dark:bg-gray-900"
+                  variants={cardReveal}
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          y: -7,
+                        }
+                  }
+                  className="group rounded-2xl border border-gray-200 dark:border-gray-800 p-5 transition-colors duration-300 hover:border-red-300 dark:hover:border-red-900 bg-white dark:bg-gray-900"
                 >
 
                   <div className="flex items-center justify-between">
@@ -760,7 +1385,17 @@ function VideoEditing() {
                       {String(index + 1).padStart(2, "0")}
                     </span>
 
-                    <Icon className="text-xl text-gray-500 group-hover:text-red-600 transition" />
+                    <motion.span
+                      whileHover={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              scale: 1.15,
+                            }
+                      }
+                    >
+                      <Icon className="text-xl text-gray-500 group-hover:text-red-600 transition" />
+                    </motion.span>
 
                   </div>
 
@@ -772,15 +1407,24 @@ function VideoEditing() {
                     {service.description}
                   </p>
 
-                  <div className="mt-5 text-red-600 group-hover:translate-x-1 transition-transform">
+                  <motion.div
+                    className="mt-5 text-red-600"
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 6,
+                          }
+                    }
+                  >
                     →
-                  </div>
+                  </motion.div>
 
-                </div>
+                </motion.div>
               );
             })}
 
-          </div>
+          </motion.div>
 
         </div>
 
@@ -795,7 +1439,15 @@ function VideoEditing() {
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12">
 
           {/* LEFT */}
-          <div>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+          >
 
             <span className="text-red-600 text-sm font-medium">
               Why Work With Me?
@@ -819,7 +1471,15 @@ function VideoEditing() {
               video editing for creators, businesses and individuals.
             </p>
 
-            <div className="mt-7 grid sm:grid-cols-2 gap-3">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: true,
+              }}
+              className="mt-7 grid sm:grid-cols-2 gap-3"
+            >
 
               {[
                 "Affordable freelancer pricing",
@@ -830,69 +1490,144 @@ function VideoEditing() {
                 "Basic & AI video options",
               ].map((item) => (
 
-                <div
+                <motion.div
                   key={item}
+                  variants={cardReveal}
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          x: 4,
+                        }
+                  }
                   className="flex items-start gap-3 rounded-xl border border-gray-200 dark:border-gray-800 p-3.5 bg-white dark:bg-gray-900"
                 >
 
-                  <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-red-50 dark:bg-red-950/40 text-red-600 flex items-center justify-center text-xs">
+                  <motion.span
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            scale: 1.15,
+                          }
+                    }
+                    className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-red-50 dark:bg-red-950/40 text-red-600 flex items-center justify-center text-xs"
+                  >
                     ✓
-                  </span>
+                  </motion.span>
 
                   <span className="text-sm text-gray-700 dark:text-gray-300">
                     {item}
                   </span>
 
-                </div>
+                </motion.div>
 
               ))}
 
-            </div>
+            </motion.div>
 
-          </div>
+          </motion.div>
 
 
           {/* RIGHT */}
-          <div className="rounded-2xl bg-gray-950 p-6 sm:p-8">
+          <motion.div
+            initial={{
+              opacity: 0,
+              x: 50,
+            }}
+            whileInView={{
+              opacity: 1,
+              x: 0,
+            }}
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+            transition={{
+              duration: 0.8,
+            }}
+            whileHover={
+              shouldReduceMotion
+                ? {}
+                : {
+                    y: -5,
+                  }
+            }
+            className="relative rounded-2xl bg-gray-950 p-6 sm:p-8 overflow-hidden"
+          >
 
-            <p className="text-sm text-red-500 font-medium">
-              Platforms & Use Cases
-            </p>
+            {!shouldReduceMotion && (
+              <motion.div
+                className="absolute -right-20 -top-20 w-56 h-56 rounded-full bg-red-600/10 blur-3xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            )}
 
-            <h3 className="mt-2 text-2xl sm:text-3xl font-semibold text-white">
-              Create Videos for Any Platform
-            </h3>
+            <div className="relative">
 
-            <p className="mt-3 text-sm text-gray-400 leading-6">
-              Whether you need content for social media, YouTube, advertising
-              or business promotion, I can edit the video according to the
-              platform.
-            </p>
+              <p className="text-sm text-red-500 font-medium">
+                Platforms & Use Cases
+              </p>
 
-            <div className="mt-7 grid grid-cols-2 gap-3">
+              <h3 className="mt-2 text-2xl sm:text-3xl font-semibold text-white">
+                Create Videos for Any Platform
+              </h3>
 
-              {platforms.map((platform) => (
+              <p className="mt-3 text-sm text-gray-400 leading-6">
+                Whether you need content for social media, YouTube, advertising
+                or business promotion, I can edit the video according to the
+                platform.
+              </p>
 
-                <div
-                  key={platform}
-                  className="rounded-xl border border-gray-800 p-4"
-                >
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{
+                  once: true,
+                }}
+                className="mt-7 grid grid-cols-2 gap-3"
+              >
 
-                  <span className="text-red-500 text-sm">
-                    ✓
-                  </span>
+                {platforms.map((platform) => (
 
-                  <p className="mt-2 text-sm text-gray-300">
-                    {platform}
-                  </p>
+                  <motion.div
+                    key={platform}
+                    variants={fadeUp}
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 4,
+                          }
+                    }
+                    className="rounded-xl border border-gray-800 p-4"
+                  >
 
-                </div>
+                    <span className="text-red-500 text-sm">
+                      ✓
+                    </span>
 
-              ))}
+                    <p className="mt-2 text-sm text-gray-300">
+                      {platform}
+                    </p>
+
+                  </motion.div>
+
+                ))}
+
+              </motion.div>
 
             </div>
 
-          </div>
+          </motion.div>
 
         </div>
 
@@ -904,7 +1639,25 @@ function VideoEditing() {
       ====================================================== */}
       <section className="w-full px-4 sm:px-6 md:px-8 lg:px-[8%] pb-14 sm:pb-20 pt-12">
 
-        <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 40,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="max-w-6xl mx-auto"
+        >
 
           <div className="relative overflow-hidden rounded-2xl bg-gray-950">
 
@@ -913,10 +1666,23 @@ function VideoEditing() {
               {/* CONTENT */}
               <div className="p-7 sm:p-9 lg:p-12">
 
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 text-red-400 text-xs sm:text-sm">
+                <motion.span
+                  initial={{
+                    opacity: 0,
+                    scale: 0.9,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 text-red-400 text-xs sm:text-sm"
+                >
                   <FiPlay />
                   Video Creation
-                </span>
+                </motion.span>
 
                 <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-semibold text-white leading-tight">
                   Have Footage?
@@ -931,7 +1697,15 @@ function VideoEditing() {
                   according to your requirements.
                 </p>
 
-                <div className="mt-6 space-y-3">
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{
+                    once: true,
+                  }}
+                  className="mt-6 space-y-3"
+                >
 
                   {[
                     "Basic Video Editing — ₹400 to ₹1,000",
@@ -941,8 +1715,16 @@ function VideoEditing() {
                     "Custom editing according to requirement",
                   ].map((item) => (
 
-                    <div
+                    <motion.div
                       key={item}
+                      variants={fadeUp}
+                      whileHover={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              x: 5,
+                            }
+                      }
                       className="flex items-center gap-3 text-sm text-gray-300"
                     >
 
@@ -952,39 +1734,103 @@ function VideoEditing() {
 
                       {item}
 
-                    </div>
+                    </motion.div>
 
                   ))}
 
-                </div>
+                </motion.div>
 
-                <button className="mt-7 inline-flex items-center gap-2 rounded-xl bg-red-600 px-5 py-3 text-sm font-medium text-white hover:bg-red-700 transition">
+                <motion.button
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          scale: 1.04,
+                        }
+                  }
+                  whileTap={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          scale: 0.97,
+                        }
+                  }
+                  className="mt-7 inline-flex items-center gap-2 rounded-xl bg-red-600 px-5 py-3 text-sm font-medium text-white hover:bg-red-700 transition"
+                >
 
                   Get Started
 
                   <FiArrowUpRight />
 
-                </button>
+                </motion.button>
 
               </div>
 
 
               {/* IMAGE / VIDEO VISUAL */}
-              <div className="relative h-[300px] sm:h-[380px] lg:h-full min-h-[460px]">
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  x: 50,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                viewport={{
+                  once: true,
+                  amount: 0.2,
+                }}
+                transition={{
+                  duration: 0.8,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="relative h-[300px] sm:h-[380px] lg:h-full min-h-[460px]"
+              >
 
-                <Image
-                  src="/video-editing.png"
-                  alt="Video Editing Services"
-                  fill
-                  className="object-cover object-center"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
+                <motion.div
+                  className="absolute inset-0"
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          scale: 1.03,
+                        }
+                  }
+                  transition={{
+                    duration: 0.6,
+                  }}
+                >
+                  <Image
+                    src="/video-editing.png"
+                    alt="Video Editing Services"
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </motion.div>
 
                 <div className="absolute inset-0 bg-gray-950/30" />
 
 
                 {/* FLOATING EDITING CARD */}
-                <div className="absolute bottom-6 left-5 right-5 sm:left-8 sm:right-8 rounded-xl bg-white/95 backdrop-blur p-4 shadow-xl">
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: 20,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    delay: 0.35,
+                  }}
+                  className="absolute bottom-6 left-5 right-5 sm:left-8 sm:right-8 rounded-xl bg-white/95 backdrop-blur p-4 shadow-xl"
+                >
 
                   <div className="flex items-center justify-between">
 
@@ -994,39 +1840,89 @@ function VideoEditing() {
                         Video Editing
                       </p>
 
-                      <p className="mt-1 text-xl font-semibold text-gray-900">
+                      <motion.p
+                        className="mt-1 text-xl font-semibold text-gray-900"
+                        initial={{
+                          opacity: 0,
+                          scale: 0.8,
+                        }}
+                        whileInView={{
+                          opacity: 1,
+                          scale: 1,
+                        }}
+                        viewport={{
+                          once: true,
+                        }}
+                        transition={{
+                          duration: 0.6,
+                          delay: 0.5,
+                          type: "spring",
+                          stiffness: 120,
+                        }}
+                      >
                         Editing in Progress →
-                      </p>
+                      </motion.p>
 
                     </div>
 
-                    <div className="text-red-600 text-2xl">
+                    <motion.div
+                      animate={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              y: [0, -4, 0],
+                            }
+                      }
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="text-red-600 text-2xl"
+                    >
                       <FiPlay />
-                    </div>
+                    </motion.div>
 
                   </div>
 
                   <div className="mt-4 flex gap-1">
 
-                    <div className="h-2 flex-1 rounded-full bg-red-600" />
-
-                    <div className="h-2 flex-1 rounded-full bg-red-500" />
-
-                    <div className="h-2 flex-1 rounded-full bg-red-400" />
-
-                    <div className="h-2 flex-1 rounded-full bg-gray-200" />
+                    {[
+                      "bg-red-600",
+                      "bg-red-500",
+                      "bg-red-400",
+                      "bg-gray-200",
+                    ].map((color, i) => (
+                      <motion.div
+                        key={color + i}
+                        initial={{
+                          scaleX: 0,
+                        }}
+                        whileInView={{
+                          scaleX: 1,
+                        }}
+                        viewport={{
+                          once: true,
+                        }}
+                        transition={{
+                          duration: 0.6,
+                          delay: 0.4 + i * 0.1,
+                        }}
+                        className={`h-2 flex-1 rounded-full origin-left ${color}`}
+                      />
+                    ))}
 
                   </div>
 
-                </div>
+                </motion.div>
 
-              </div>
+              </motion.div>
 
             </div>
 
           </div>
 
-        </div>
+        </motion.div>
 
       </section>
     </>

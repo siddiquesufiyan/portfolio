@@ -1,23 +1,117 @@
 "use client";
 import Image from "next/image";
 import {
-  FaArrowRight,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import {
   FaCheckCircle,
   FaWhatsapp,
   FaUsers,
   FaBullhorn,
   FaRobot,
   FaDatabase,
-  FaChartLine,
   FaPaperPlane,
   FaShieldAlt,
-  FaComments,
-  FaTags,
   FaUserFriends,
-  FaMagic,
 } from "react-icons/fa";
 
+/* =========================================================
+   ANIMATION VARIANTS
+========================================================= */
+
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 35,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const fadeIn = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.7,
+      ease: "easeOut",
+    },
+  },
+};
+
+const scaleIn = {
+  hidden: {
+    opacity: 0,
+    scale: 0.94,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.09,
+    },
+  },
+};
+
+const cardReveal = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+    scale: 0.97,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 function WhatsAppServices() {
+  const shouldReduceMotion = useReducedMotion();
+
+  /* =====================================================
+     SCROLL PROGRESS
+  ====================================================== */
+
+  const { scrollYProgress } = useScroll();
+
+  const heroGlowY = useTransform(
+    scrollYProgress,
+    [0, 0.35],
+    [0, shouldReduceMotion ? 0 : 180]
+  );
+
+  const heroCardY = useTransform(
+    scrollYProgress,
+    [0, 0.4],
+    [0, shouldReduceMotion ? 0 : -60]
+  );
+
   const whatsappSteps = [
     {
       number: "01",
@@ -115,81 +209,225 @@ function WhatsAppServices() {
   return (
     <>
       {/* =====================================================
+          GLOBAL SCROLL PROGRESS
+      ====================================================== */}
+
+      {!shouldReduceMotion && (
+        <motion.div
+          className="fixed top-0 left-0 right-0 h-[2px] bg-green-600 origin-left z-[9999]"
+          style={{
+            scaleX: scrollYProgress,
+          }}
+        />
+      )}
+
+      {/* =====================================================
           SECTION 1 — WHATSAPP INTRO + PRICING
       ====================================================== */}
-      <section className="w-full px-4 sm:px-6 md:px-8 lg:px-[8%] py-10 sm:py-14">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
+      <section className="relative w-full overflow-hidden px-4 sm:px-6 md:px-8 lg:px-[8%] py-10 sm:py-14">
+
+        {!shouldReduceMotion && (
+          <motion.div
+            className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-green-500/10 blur-[120px]"
+            style={{
+              y: heroGlowY,
+            }}
+          />
+        )}
+
+        <div className="relative max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
 
           {/* Left Content */}
-          <div>
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 mt-4 md:mt-2 rounded-full bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 text-xs sm:text-sm font-medium">
-              <FaWhatsapp />
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.25,
+            }}
+          >
+            <motion.span
+              variants={fadeUp}
+              className="inline-flex items-center gap-2 px-3 py-1.5 mt-4 md:mt-2 rounded-full bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 text-xs sm:text-sm font-medium"
+            >
+              <motion.span
+                animate={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        scale: [1, 1.2, 1],
+                      }
+                }
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <FaWhatsapp />
+              </motion.span>
               WhatsApp Marketing
-            </span>
+            </motion.span>
 
-            <h2 className="mt-4 text-2xl dark:text-white sm:text-3xl md:text-4xl font-semibold text-gray-900 leading-tight">
+            <motion.h2
+              variants={fadeUp}
+              className="mt-4 text-2xl dark:text-white sm:text-3xl md:text-4xl font-semibold text-gray-900 leading-tight"
+            >
               Reach More Customers
-              <span className="text-green-600">
+              <motion.span
+                className="text-green-600 inline-block"
+                whileHover={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        x: 4,
+                      }
+                }
+              >
                 {" "}
                 & Generate More Leads
-              </span>
-            </h2>
+              </motion.span>
+            </motion.h2>
 
-            <p className="mt-4 text-sm sm:text-base dark:text-gray-200 text-gray-600 leading-7">
+            <motion.p
+              variants={fadeUp}
+              className="mt-4 text-sm sm:text-base dark:text-gray-200 text-gray-600 leading-7"
+            >
               I provide result-focused WhatsApp marketing services to help
               businesses reach their customers directly, promote offers and
               generate potential leads through targeted WhatsApp campaigns.
-            </p>
+            </motion.p>
 
-            <p className="mt-3 text-sm sm:text-base dark:text-gray-200 text-gray-600 leading-7">
+            <motion.p
+              variants={fadeUp}
+              className="mt-3 text-sm sm:text-base dark:text-gray-200 text-gray-600 leading-7"
+            >
               Using the AI Sency platform, I manage customer outreach,
               promotional campaigns, bulk messaging and lead-focused WhatsApp
               marketing according to your business requirements.
-            </p>
+            </motion.p>
 
             {/* Highlights */}
-            <div className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-gray-700 dark:text-gray-200">
-              <div className="flex items-center gap-2">
-                <FaCheckCircle className="text-green-600" />
-                Bulk WhatsApp Messaging
-              </div>
-
-              <div className="flex items-center gap-2">
-                <FaCheckCircle className="text-green-600" />
-                Lead Generation
-              </div>
-
-              <div className="flex items-center gap-2">
-                <FaCheckCircle className="text-green-600" />
-                Promotional Campaigns
-              </div>
-
-              <div className="flex items-center gap-2">
-                <FaCheckCircle className="text-green-600" />
-                Customer Follow-ups
-              </div>
-            </div>
+            <motion.div
+              variants={staggerContainer}
+              className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-gray-700 dark:text-gray-200"
+            >
+              {[
+                "Bulk WhatsApp Messaging",
+                "Lead Generation",
+                "Promotional Campaigns",
+                "Customer Follow-ups",
+              ].map((item) => (
+                <motion.div
+                  key={item}
+                  variants={fadeUp}
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          x: 5,
+                        }
+                  }
+                  className="flex items-center gap-2"
+                >
+                  <motion.span
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            scale: 1.3,
+                          }
+                    }
+                  >
+                    <FaCheckCircle className="text-green-600" />
+                  </motion.span>
+                  {item}
+                </motion.div>
+              ))}
+            </motion.div>
 
             {/* Small trust points */}
-            <div className="mt-7 flex flex-wrap gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-800 px-3 py-2 text-xs text-gray-600 dark:text-gray-300">
+            <motion.div
+              variants={staggerContainer}
+              className="mt-7 flex flex-wrap gap-3"
+            >
+              <motion.span
+                variants={fadeUp}
+                whileHover={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        y: -3,
+                      }
+                }
+                className="inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-800 px-3 py-2 text-xs text-gray-600 dark:text-gray-300"
+              >
                 <FaShieldAlt className="text-green-600" />
                 Confidential Data
-              </span>
+              </motion.span>
 
-              <span className="inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-800 px-3 py-2 text-xs text-gray-600 dark:text-gray-300">
+              <motion.span
+                variants={fadeUp}
+                whileHover={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        y: -3,
+                      }
+                }
+                className="inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-800 px-3 py-2 text-xs text-gray-600 dark:text-gray-300"
+              >
                 <FaRobot className="text-green-600" />
                 AI Sency Platform
-              </span>
-            </div>
-          </div>
+              </motion.span>
+            </motion.div>
+          </motion.div>
 
           {/* Pricing Card */}
-          <div className="relative rounded-2xl bg-gray-950 p-7 sm:p-9 overflow-hidden">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.25,
+            }}
+            variants={scaleIn}
+            style={{
+              y: heroCardY,
+            }}
+            className="relative rounded-2xl bg-gray-950 p-7 sm:p-9 overflow-hidden"
+          >
 
-            {/* Green Glow */}
-            <div className="absolute -top-20 -right-20 w-56 h-56 rounded-full bg-green-500/15 blur-3xl" />
-            <div className="absolute -bottom-24 -left-20 w-52 h-52 rounded-full bg-green-400/10 blur-3xl" />
+            {!shouldReduceMotion && (
+              <>
+                <motion.div
+                  className="absolute -top-20 -right-20 w-56 h-56 rounded-full bg-green-500/15 blur-3xl"
+                  animate={{
+                    x: [0, 30, 0],
+                    y: [0, 20, 0],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 7,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+                <motion.div
+                  className="absolute -bottom-24 -left-20 w-52 h-52 rounded-full bg-green-400/10 blur-3xl"
+                  animate={{
+                    x: [0, -25, 0],
+                    y: [0, 25, 0],
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+              </>
+            )}
 
             <div className="relative z-10">
 
@@ -198,9 +436,28 @@ function WhatsAppServices() {
               </p>
 
               <div className="mt-2 flex items-end gap-2">
-                <span className="text-4xl sm:text-5xl font-semibold text-white">
+                <motion.span
+                  className="text-4xl sm:text-5xl font-semibold text-white"
+                  initial={{
+                    opacity: 0,
+                    scale: 0.8,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    duration: 0.7,
+                    delay: 0.2,
+                    type: "spring",
+                    stiffness: 100,
+                  }}
+                >
                   ₹1,000
-                </span>
+                </motion.span>
 
                 <span className="mb-1 text-gray-400 text-sm">
                   / campaign
@@ -220,35 +477,36 @@ function WhatsAppServices() {
               </p>
 
               <ul className="mt-5 space-y-3 text-sm text-gray-300">
-                <li className="flex items-center gap-2">
-                  <FaCheckCircle className="text-green-500" />
-                  Targeted customer outreach
-                </li>
-
-                <li className="flex items-center gap-2">
-                  <FaCheckCircle className="text-green-500" />
-                  Bulk campaign management
-                </li>
-
-                <li className="flex items-center gap-2">
-                  <FaCheckCircle className="text-green-500" />
-                  Promotional offer campaigns
-                </li>
-
-                <li className="flex items-center gap-2">
-                  <FaCheckCircle className="text-green-500" />
-                  Lead-focused messaging
-                </li>
-
-                <li className="flex items-center gap-2">
-                  <FaCheckCircle className="text-green-500" />
-                  AI Sency platform
-                </li>
-
-                <li className="flex items-center gap-2">
-                  <FaCheckCircle className="text-green-500" />
-                  Confidential customer data handling
-                </li>
+                {[
+                  "Targeted customer outreach",
+                  "Bulk campaign management",
+                  "Promotional offer campaigns",
+                  "Lead-focused messaging",
+                  "AI Sency platform",
+                  "Confidential customer data handling",
+                ].map((item) => (
+                  <motion.li
+                    key={item}
+                    initial={{
+                      opacity: 0,
+                      x: -15,
+                    }}
+                    whileInView={{
+                      opacity: 1,
+                      x: 0,
+                    }}
+                    viewport={{
+                      once: true,
+                    }}
+                    transition={{
+                      duration: 0.4,
+                    }}
+                    className="flex items-center gap-2"
+                  >
+                    <FaCheckCircle className="text-green-500" />
+                    {item}
+                  </motion.li>
+                ))}
               </ul>
 
               <div className="mt-6 rounded-xl border border-green-500/20 bg-green-500/5 p-4">
@@ -263,7 +521,7 @@ function WhatsAppServices() {
               </div>
 
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -276,7 +534,15 @@ function WhatsAppServices() {
         <div className="max-w-6xl mx-auto">
 
           {/* Heading */}
-          <div className="max-w-2xl mb-10 sm:mb-12">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+            }}
+            className="max-w-2xl mb-10 sm:mb-12"
+          >
 
             <span className="text-green-600 text-sm font-medium">
               My WhatsApp Process
@@ -292,19 +558,54 @@ function WhatsAppServices() {
               WhatsApp marketing more organized and effective.
             </p>
 
-          </div>
+          </motion.div>
 
 
           {/* Steps */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.1,
+            }}
+            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          >
 
             {whatsappSteps.map((step, index) => (
-              <div
+              <motion.div
                 key={step.number}
-                className={`group relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-green-200 dark:hover:border-green-500/30 ${
+                variants={cardReveal}
+                whileHover={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        y: -7,
+                      }
+                }
+                className={`group relative rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 sm:p-6 overflow-hidden transition-colors duration-300 hover:border-green-200 dark:hover:border-green-500/30 ${
                   index === 6 ? "lg:col-span-2" : ""
                 }`}
               >
+
+                {/* Animated progress line */}
+                <motion.div
+                  initial={{
+                    scaleX: 0,
+                  }}
+                  whileInView={{
+                    scaleX: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    duration: 0.8,
+                    delay: index * 0.08,
+                  }}
+                  className="absolute top-0 left-0 right-0 h-[2px] bg-green-600 origin-left"
+                />
 
                 <div className="flex items-center justify-between">
 
@@ -312,9 +613,18 @@ function WhatsAppServices() {
                     {step.number}
                   </span>
 
-                  <span className="text-green-600 text-lg transition-transform duration-300 group-hover:translate-x-1">
+                  <motion.span
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 6,
+                          }
+                    }
+                    className="text-green-600 text-lg"
+                  >
                     →
-                  </span>
+                  </motion.span>
 
                 </div>
 
@@ -326,10 +636,10 @@ function WhatsAppServices() {
                   {step.description}
                 </p>
 
-              </div>
+              </motion.div>
             ))}
 
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -342,7 +652,15 @@ function WhatsAppServices() {
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12">
 
           {/* Why WhatsApp Marketing */}
-          <div>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+          >
 
             <span className="text-green-600 text-sm font-medium">
               Why WhatsApp Marketing?
@@ -371,33 +689,94 @@ function WhatsAppServices() {
 
 
             {/* Benefits */}
-            <div className="mt-7 grid sm:grid-cols-2 gap-3">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: true,
+              }}
+              className="mt-7 grid sm:grid-cols-2 gap-3"
+            >
 
               {benefits.map((benefit) => (
-                <div
+                <motion.div
                   key={benefit}
-                  className="group flex items-start gap-3 rounded-xl border border-gray-200 dark:border-gray-800 p-3.5 transition-all duration-300 hover:border-green-200 dark:hover:border-green-500/30 hover:-translate-y-0.5"
+                  variants={cardReveal}
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          x: 4,
+                        }
+                  }
+                  className="flex items-start gap-3 rounded-xl border border-gray-200 dark:border-gray-800 p-3.5 transition-colors duration-300 hover:border-green-200 dark:hover:border-green-500/30"
                 >
 
-                  <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-green-50 dark:bg-green-500/10 text-green-600 flex items-center justify-center text-xs">
+                  <motion.span
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            scale: 1.15,
+                          }
+                    }
+                    className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-green-50 dark:bg-green-500/10 text-green-600 flex items-center justify-center text-xs"
+                  >
                     ✓
-                  </span>
+                  </motion.span>
 
                   <span className="text-sm text-gray-700 dark:text-gray-300">
                     {benefit}
                   </span>
 
-                </div>
+                </motion.div>
               ))}
 
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
 
           {/* What I Offer */}
-          <div className="rounded-2xl bg-gray-950 p-6 sm:p-8 relative overflow-hidden">
+          <motion.div
+            initial={{
+              opacity: 0,
+              x: 50,
+            }}
+            whileInView={{
+              opacity: 1,
+              x: 0,
+            }}
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+            transition={{
+              duration: 0.8,
+            }}
+            whileHover={
+              shouldReduceMotion
+                ? {}
+                : {
+                    y: -5,
+                  }
+            }
+            className="rounded-2xl bg-gray-950 p-6 sm:p-8 relative overflow-hidden"
+          >
 
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-green-500/10 rounded-full blur-3xl" />
+            {!shouldReduceMotion && (
+              <motion.div
+                className="absolute -top-24 -right-24 w-64 h-64 bg-green-500/10 rounded-full blur-3xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            )}
 
             <div className="relative z-10">
 
@@ -416,11 +795,27 @@ function WhatsAppServices() {
               </p>
 
 
-              <div className="mt-7 grid sm:grid-cols-2 gap-x-6">
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{
+                  once: true,
+                }}
+                className="mt-7 grid sm:grid-cols-2 gap-x-6"
+              >
 
                 {offers.map((offer, index) => (
-                  <div
+                  <motion.div
                     key={offer}
+                    variants={fadeUp}
+                    whileHover={
+                      shouldReduceMotion
+                        ? {}
+                        : {
+                            x: 4,
+                          }
+                    }
                     className="flex items-center gap-3 py-3 border-b border-gray-800"
                   >
 
@@ -432,13 +827,13 @@ function WhatsAppServices() {
                       {offer}
                     </span>
 
-                  </div>
+                  </motion.div>
                 ))}
 
-              </div>
+              </motion.div>
 
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </section>
@@ -449,23 +844,79 @@ function WhatsAppServices() {
       ====================================================== */}
       <section className="w-full px-4 sm:px-6 md:px-8 lg:px-[8%] pb-12 sm:pb-16">
 
-        <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 40,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="max-w-6xl mx-auto"
+        >
 
           <div className="relative overflow-hidden rounded-2xl bg-gray-950">
 
-            {/* Green Glow */}
-            <div className="absolute -top-32 -left-32 w-80 h-80 rounded-full bg-green-500/10 blur-3xl" />
-            <div className="absolute -bottom-32 -right-32 w-80 h-80 rounded-full bg-green-500/10 blur-3xl" />
+            {!shouldReduceMotion && (
+              <>
+                <motion.div
+                  className="absolute -top-32 -left-32 w-80 h-80 rounded-full bg-green-500/10 blur-3xl"
+                  animate={{
+                    x: [0, 30, 0],
+                    y: [0, 20, 0],
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+                <motion.div
+                  className="absolute -bottom-32 -right-32 w-80 h-80 rounded-full bg-green-500/10 blur-3xl"
+                  animate={{
+                    x: [0, -30, 0],
+                    y: [0, -20, 0],
+                  }}
+                  transition={{
+                    duration: 7,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+              </>
+            )}
 
             <div className="relative z-10 grid lg:grid-cols-2 items-center">
 
               {/* Content */}
               <div className="p-7 sm:p-9 lg:p-12">
 
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-green-400 text-xs sm:text-sm">
+                <motion.span
+                  initial={{
+                    opacity: 0,
+                    scale: 0.9,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 text-green-400 text-xs sm:text-sm"
+                >
                   <FaRobot />
                   AI Sency Platform
-                </span>
+                </motion.span>
 
                 <h2 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-semibold text-white leading-tight">
                   Power Your WhatsApp Marketing
@@ -489,20 +940,51 @@ function WhatsAppServices() {
 
 
                 {/* Feature List */}
-                <div className="mt-7 grid sm:grid-cols-2 gap-4">
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{
+                    once: true,
+                  }}
+                  className="mt-7 grid sm:grid-cols-2 gap-4"
+                >
 
                   {aiSencyFeatures.map((feature) => {
                     const Icon = feature.icon;
 
                     return (
-                      <div
+                      <motion.div
                         key={feature.title}
-                        className="rounded-xl border border-gray-800 bg-white/[0.03] p-4 transition-all duration-300 hover:border-green-500/30 hover:bg-green-500/[0.03]"
+                        variants={cardReveal}
+                        whileHover={
+                          shouldReduceMotion
+                            ? {}
+                            : {
+                                y: -5,
+                              }
+                        }
+                        className="rounded-xl border border-gray-800 bg-white/[0.03] p-4 transition-colors duration-300 hover:border-green-500/30 hover:bg-green-500/[0.03]"
                       >
 
-                        <div className="w-9 h-9 rounded-lg bg-green-500/10 text-green-500 flex items-center justify-center">
+                        <motion.div
+                          whileHover={
+                            shouldReduceMotion
+                              ? {}
+                              : {
+                                  rotate: 8,
+                                  scale: 1.1,
+                                }
+                          }
+                          transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 15,
+                          }}
+                          className="w-9 h-9 rounded-lg bg-green-500/10 text-green-500 flex items-center justify-center"
+                        >
                           <Icon />
-                        </div>
+                        </motion.div>
 
                         <h3 className="mt-3 text-sm font-semibold text-white">
                           {feature.title}
@@ -512,37 +994,100 @@ function WhatsAppServices() {
                           {feature.description}
                         </p>
 
-                      </div>
+                      </motion.div>
                     );
                   })}
 
-                </div>
+                </motion.div>
 
               </div>
 
 
               {/* Image / Visual */}
-            <div className="relative h-[340px] sm:h-[400px] lg:h-full min-h-[560px]">
-  <Image
-    src="/whatsapp-marketing.webp"
-    alt="WhatsApp Marketing Campaign"
-    fill
-    priority
-    className="object-cover"
-    sizes="(max-width: 1024px) 100vw, 50vw"
-  />
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  x: 50,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                viewport={{
+                  once: true,
+                  amount: 0.2,
+                }}
+                transition={{
+                  duration: 0.8,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="relative h-[340px] sm:h-[400px] lg:h-full min-h-[560px]"
+              >
+
+                <motion.div
+                  whileHover={
+                    shouldReduceMotion
+                      ? {}
+                      : {
+                          scale: 1.03,
+                        }
+                  }
+                  transition={{
+                    duration: 0.6,
+                  }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src="/whatsapp-marketing.webp"
+                    alt="WhatsApp Marketing Campaign"
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </motion.div>
 
                 <div className="absolute inset-0 bg-gray-950/45" />
 
 
                 {/* Floating Campaign Card */}
-                <div className="absolute top-8 left-5 right-5 sm:left-8 sm:right-8 rounded-xl bg-white/95 backdrop-blur p-4 shadow-xl">
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: -20,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    delay: 0.2,
+                  }}
+                  className="absolute top-8 left-5 right-5 sm:left-8 sm:right-8 rounded-xl bg-white/95 backdrop-blur p-4 shadow-xl"
+                >
 
                   <div className="flex items-center gap-3">
 
-                    <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white text-lg">
+                    <motion.div
+                      animate={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              scale: [1, 1.1, 1],
+                            }
+                      }
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white text-lg"
+                    >
                       <FaWhatsapp />
-                    </div>
+                    </motion.div>
 
                     <div>
                       <p className="text-xs text-gray-500">
@@ -554,15 +1099,45 @@ function WhatsAppServices() {
                       </p>
                     </div>
 
-                    <span className="ml-auto w-2.5 h-2.5 rounded-full bg-green-500" />
+                    <motion.span
+                      animate={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              opacity: [1, 0.4, 1],
+                            }
+                      }
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="ml-auto w-2.5 h-2.5 rounded-full bg-green-500"
+                    />
 
                   </div>
 
-                </div>
+                </motion.div>
 
 
                 {/* Floating Message Card */}
-                <div className="absolute bottom-7 left-5 right-5 sm:left-8 sm:right-8 rounded-xl bg-white/95 backdrop-blur p-4 shadow-xl">
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: 20,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    delay: 0.35,
+                  }}
+                  className="absolute bottom-7 left-5 right-5 sm:left-8 sm:right-8 rounded-xl bg-white/95 backdrop-blur p-4 shadow-xl"
+                >
 
                   <div className="flex items-start gap-3">
 
@@ -581,7 +1156,22 @@ function WhatsAppServices() {
                       </p>
 
                       <div className="mt-3 h-2 rounded-full bg-gray-200 overflow-hidden">
-                        <div className="h-full w-[78%] bg-green-500 rounded-full" />
+                        <motion.div
+                          initial={{
+                            scaleX: 0,
+                          }}
+                          whileInView={{
+                            scaleX: 1,
+                          }}
+                          viewport={{
+                            once: true,
+                          }}
+                          transition={{
+                            duration: 1,
+                            delay: 0.5,
+                          }}
+                          className="h-full w-[78%] bg-green-500 rounded-full origin-left"
+                        />
                       </div>
 
                       <p className="mt-2 text-[10px] text-gray-500">
@@ -592,14 +1182,14 @@ function WhatsAppServices() {
 
                   </div>
 
-                </div>
+                </motion.div>
 
-              </div>
+              </motion.div>
 
             </div>
           </div>
 
-        </div>
+        </motion.div>
       </section>
 
 
@@ -608,20 +1198,71 @@ function WhatsAppServices() {
       ====================================================== */}
       <section className="w-full px-4 sm:px-6 md:px-8 lg:px-[8%] pb-14 sm:pb-20">
 
-        <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 40,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="max-w-6xl mx-auto"
+        >
 
           <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 sm:p-8 lg:p-10">
 
             <div className="grid lg:grid-cols-[auto_1fr] gap-6 items-start">
 
               {/* Icon */}
-              <div className="w-14 h-14 rounded-2xl bg-green-50 dark:bg-green-500/10 text-green-600 flex items-center justify-center text-xl">
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  scale: 0.7,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                viewport={{
+                  once: true,
+                }}
+                transition={{
+                  duration: 0.6,
+                  type: "spring",
+                  stiffness: 150,
+                }}
+                whileHover={
+                  shouldReduceMotion
+                    ? {}
+                    : {
+                        rotate: 8,
+                        scale: 1.08,
+                      }
+                }
+                className="w-14 h-14 rounded-2xl bg-green-50 dark:bg-green-500/10 text-green-600 flex items-center justify-center text-xl"
+              >
                 <FaShieldAlt />
-              </div>
+              </motion.div>
 
 
               {/* Content */}
-              <div>
+              <motion.div
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{
+                  once: true,
+                }}
+              >
 
                 <span className="text-green-600 text-sm font-medium">
                   Data Privacy & Security
@@ -639,67 +1280,91 @@ function WhatsAppServices() {
                 </p>
 
 
-                <div className="mt-7 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{
+                    once: true,
+                  }}
+                  className="mt-7 grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
+                >
 
-                  <div className="rounded-xl bg-gray-50 dark:bg-gray-950 p-4">
-                    <FaDatabase className="text-green-600 text-lg" />
+                  {[
+                    {
+                      icon: FaDatabase,
+                      title: "Confidential",
+                      description:
+                        "Customer data is treated as confidential campaign information.",
+                    },
+                    {
+                      icon: FaShieldAlt,
+                      title: "Responsible Handling",
+                      description:
+                        "Data is handled responsibly for the agreed marketing purpose.",
+                    },
+                    {
+                      icon: FaUserFriends,
+                      title: "Customer Database",
+                      description:
+                        "Your provided contacts are used for the agreed campaign.",
+                    },
+                    {
+                      icon: FaShieldAlt,
+                      title: "Privacy Focused",
+                      description:
+                        "Your campaign information is handled with privacy in mind.",
+                    },
+                  ].map((item) => {
+                    const Icon = item.icon;
 
-                    <h3 className="mt-3 text-sm font-semibold text-gray-900 dark:text-white">
-                      Confidential
-                    </h3>
+                    return (
+                      <motion.div
+                        key={item.title}
+                        variants={cardReveal}
+                        whileHover={
+                          shouldReduceMotion
+                            ? {}
+                            : {
+                                y: -5,
+                              }
+                        }
+                        className="rounded-xl bg-gray-50 dark:bg-gray-950 p-4"
+                      >
+                        <Icon className="text-green-600 text-lg" />
 
-                    <p className="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">
-                      Customer data is treated as confidential campaign
-                      information.
-                    </p>
-                  </div>
+                        <h3 className="mt-3 text-sm font-semibold text-gray-900 dark:text-white">
+                          {item.title}
+                        </h3>
 
+                        <p className="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">
+                          {item.description}
+                        </p>
+                      </motion.div>
+                    );
+                  })}
 
-                  <div className="rounded-xl bg-gray-50 dark:bg-gray-950 p-4">
-                    <FaShieldAlt className="text-green-600 text-lg" />
-
-                    <h3 className="mt-3 text-sm font-semibold text-gray-900 dark:text-white">
-                      Responsible Handling
-                    </h3>
-
-                    <p className="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">
-                      Data is handled responsibly for the agreed marketing
-                      purpose.
-                    </p>
-                  </div>
-
-
-                  <div className="rounded-xl bg-gray-50 dark:bg-gray-950 p-4">
-                    <FaUserFriends className="text-green-600 text-lg" />
-
-                    <h3 className="mt-3 text-sm font-semibold text-gray-900 dark:text-white">
-                      Customer Database
-                    </h3>
-
-                    <p className="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">
-                      Your provided contacts are used for the agreed campaign.
-                    </p>
-                  </div>
-
-
-                  <div className="rounded-xl bg-gray-50 dark:bg-gray-950 p-4">
-                    <FaLockIcon />
-
-                    <h3 className="mt-3 text-sm font-semibold text-gray-900 dark:text-white">
-                      Privacy Focused
-                    </h3>
-
-                    <p className="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">
-                      Your campaign information is handled with privacy in
-                      mind.
-                    </p>
-                  </div>
-
-                </div>
+                </motion.div>
 
 
                 {/* Important Note */}
-                <div className="mt-7 rounded-xl border border-green-200 dark:border-green-500/20 bg-green-50 dark:bg-green-500/5 p-4">
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: 15,
+                  }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  viewport={{
+                    once: true,
+                  }}
+                  transition={{
+                    delay: 0.2,
+                  }}
+                  className="mt-7 rounded-xl border border-green-200 dark:border-green-500/20 bg-green-50 dark:bg-green-500/5 p-4"
+                >
 
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-6">
                     <span className="font-semibold text-green-700 dark:text-green-400">
@@ -711,31 +1376,17 @@ function WhatsAppServices() {
                     lawful and appropriate customer data for marketing.
                   </p>
 
-                </div>
+                </motion.div>
 
-              </div>
+              </motion.div>
             </div>
           </div>
 
-        </div>
+        </motion.div>
       </section>
 
 
     </>
-  );
-}
-
-
-/*
-  Small reusable icon component
-  so the privacy card doesn't need another
-  external icon import.
-*/
-function FaLockIcon() {
-  return (
-    <div className="text-green-600">
-      <FaShieldAlt />
-    </div>
   );
 }
 
