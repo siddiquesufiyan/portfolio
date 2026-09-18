@@ -53,55 +53,14 @@ function ContactHero() {
 
   return (
     <section className="relative w-full overflow-hidden pt-28 pb-14 md:pt-32 md:pb-16">
-      {/* ================= BACKGROUND ================= */}
-      <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
-        {/* Main moving spotlight */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={{
-            opacity: 0.65,
-            scale: 1,
-            x: ["-50%", "-43%", "-50%"],
-          }}
-          transition={{
-            opacity: { duration: 0.35 },
-            scale: { duration: 0.5 },
-            x: {
-              duration: 5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            },
-          }}
-          className="absolute top-0 left-1/2 w-[520px] h-[300px] bg-red-50 rounded-full blur-3xl"
-        />
+  {/* ================= BACKGROUND ================= */}
+<div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
 
-        {/* Floating mini glow */}
-        <motion.div
-          animate={{
-            y: [0, -18, 0],
-            x: [0, 12, 0],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-40 left-[8%] w-20 h-20 bg-red-100/40 rounded-full blur-2xl"
-        />
 
-        <motion.div
-          animate={{
-            y: [0, 15, 0],
-            x: [0, -10, 0],
-          }}
-          transition={{
-            duration: 4.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-52 right-[8%] w-24 h-24 bg-red-100/40 rounded-full blur-2xl"
-        />
-      </div>
+
+
+
+</div>
 
       <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-12">
         {/* ================= LABEL ================= */}
@@ -122,8 +81,8 @@ function ContactHero() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-100 bg-red-50 text-red-600 text-xs md:text-sm font-medium"
           >
             <span className="relative flex w-2 h-2">
-              <span className="absolute inset-0 rounded-full bg-red-600 animate-ping opacity-60" />
-              <span className="relative w-2 h-2 rounded-full bg-red-600" />
+              <span className="absolute inset-0 dark:text-white rounded-full bg-red-600 animate-ping opacity-60" />
+              <span className="relative w-2 h-2 dark:text-white rounded-full bg-red-600" />
             </span>
 
             Let's Work Together
@@ -142,11 +101,11 @@ function ContactHero() {
               },
             },
           }}
-          className="max-w-4xl mx-auto text-center"
+          className="max-w-4xl dark:text-white mx-auto text-center"
         >
           <motion.h1
             variants={fastReveal}
-            className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 leading-tight"
+            className="text-4xl dark:text-white sm:text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 leading-tight"
           >
             Let's Talk About Your{" "}
             <motion.span
@@ -174,7 +133,7 @@ function ContactHero() {
 
           <motion.p
             variants={fastReveal}
-            className="max-w-2xl mx-auto mt-5 text-sm sm:text-base md:text-lg text-gray-600 leading-7 md:leading-8"
+            className="max-w-2xl mx-auto  dark:text-white mt-5 text-sm sm:text-base md:text-lg text-gray-600 leading-7 md:leading-8"
           >
             I am a digital marketing freelancer and web designer with 4+
             years of experience helping businesses, startups and professionals
@@ -184,7 +143,7 @@ function ContactHero() {
 
           <motion.p
             variants={fastReveal}
-            className="max-w-xl mx-auto mt-3 text-sm text-gray-500 leading-6"
+            className="max-w-xl mx-auto mt-3 dark:text-white text-sm text-gray-500 leading-6"
           >
             Whether you need a website, SEO, Facebook Ads, Google Business
             Profile, social media management, graphic design, video editing or

@@ -41,7 +41,7 @@ function WorkHero() {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="absolute inset-0 -z-10"
       >
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[280px] bg-red-50 rounded-full blur-3xl" />
+        <div className="absolute" />
       </motion.div>
 
       <div className="max-w-6xl mx-auto px-6 md:px-10 lg:px-12">
@@ -83,7 +83,7 @@ function WorkHero() {
               delay: 0.05,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 leading-tight"
+            className="text-4xl dark:text-white sm:text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 leading-tight"
           >
             Work That Helps{" "}
             <motion.span
@@ -107,7 +107,7 @@ function WorkHero() {
               duration: 0.4,
               delay: 0.15,
             }}
-            className="max-w-2xl mx-auto mt-5 text-sm sm:text-base md:text-lg text-gray-600 leading-7 md:leading-8"
+            className="max-w-2xl mx-auto mt-5 dark:text-white text-sm sm:text-base md:text-lg text-gray-600 leading-7 md:leading-8"
           >
             With 4+ years of experience, I have worked with businesses,
             startups and professionals across different industries to build
@@ -138,8 +138,8 @@ function WorkHero() {
             </Link>
 
             <a
-              href="#work"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-full border border-gray-300 text-gray-700 text-sm font-medium hover:border-red-600 hover:text-red-600 hover:-translate-y-0.5 transition-all duration-200"
+              href="/services"
+              className="inline-flex dark:text-white items-center justify-center px-6 py-3 rounded-full border border-gray-300 text-gray-700 text-sm font-medium hover:border-red-600 hover:text-red-600 hover:-translate-y-0.5 transition-all duration-200"
             >
               Explore My Work
             </a>

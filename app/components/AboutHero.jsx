@@ -18,50 +18,9 @@ function AboutHero() {
       {/* ================= BACKGROUND ================= */}
       <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
 
-        {/* Main glow */}
-        <motion.div
-          initial={{
-            opacity: 0,
-            scale: 0.65,
-          }}
-          animate={{
-            opacity: 0.6,
-            scale: 1,
-          }}
-          transition={{
-            duration: 0.5,
-            ease: "easeOut",
-          }}
-          className="absolute top-10 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-red-50 rounded-full blur-3xl"
-        />
+       
 
-        {/* Moving glow 1 */}
-        <motion.div
-          animate={{
-            x: [0, 35, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-32 left-[8%] w-20 h-20 bg-red-100/40 rounded-full blur-2xl"
-        />
-
-        {/* Moving glow 2 */}
-        <motion.div
-          animate={{
-            x: [0, -30, 0],
-            y: [0, 25, 0],
-          }}
-          transition={{
-            duration: 5.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-48 right-[8%] w-24 h-24 bg-red-100/40 rounded-full blur-2xl"
-        />
+     
 
       </div>
 
@@ -90,7 +49,7 @@ function AboutHero() {
               scale: 1.06,
               y: -2,
             }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-100 bg-red-50 text-red-600 text-xs md:text-sm font-medium"
+            className="inline-flex  items-center gap-2 px-4 py-2 rounded-full border border-red-100 bg-red-50 text-red-600 text-xs md:text-sm font-medium"
           >
             <span className="relative flex w-2 h-2">
               <span className="absolute inset-0 rounded-full bg-red-600 animate-ping opacity-60" />
@@ -102,7 +61,7 @@ function AboutHero() {
         </motion.div>
 
         {/* ================= MAIN CONTENT ================= */}
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto dark:text-white text-center">
 
           {/* Heading */}
           <motion.h1
@@ -121,7 +80,7 @@ function AboutHero() {
               duration: 0.42,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-gray-900 leading-tight"
+            className="text-4xl sm:text-5xl dark:text-white md:text-6xl font-semibold tracking-tight text-gray-900 leading-tight"
           >
             Digital Marketing Freelancer &{" "}
 
@@ -259,7 +218,7 @@ function AboutHero() {
             >
               <Link
                 href="/services"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-full border border-gray-300 text-gray-700 text-sm font-medium hover:border-red-600 hover:text-red-600 transition-all duration-300"
+                className="inline-flex  dark:text-white items-center justify-center px-6 py-3 rounded-full border border-gray-300 text-gray-700 text-sm font-medium hover:border-red-600 hover:text-red-600 transition-all duration-300"
               >
                 Explore My Services
               </Link>
