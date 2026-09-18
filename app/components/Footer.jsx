@@ -217,31 +217,31 @@ function Footer() {
               </li>
 
               <li>
-                <Link href="services/facebook-ads" className={linkClass}>
+                <Link href="/services/facebook-ads" className={linkClass}>
                   Facebook Ads
                 </Link>
               </li>
 
               <li>
-                <Link href="services/whatsapp-marketing" className={linkClass}>
+                <Link href="/services/whatsapp-marketing" className={linkClass}>
                   WhatsApp Marketing
                 </Link>
               </li>
 
               <li>
-                <Link href="services/video-editing" className={linkClass}>
+                <Link href="/services/video-editing" className={linkClass}>
                   Video Editing
                 </Link>
               </li>
 
               <li>
-                <Link href="services/gnb-creation" className={linkClass}>
+                <Link href="/services/gnb-creation" className={linkClass}>
                   GNB Creation
                 </Link>
               </li>
 
               <li>
-                <Link href="services/graphic-design" className={linkClass}>
+                <Link href="/services/graphic-design" className={linkClass}>
                  Graphic Design
                 </Link>
               </li>
@@ -387,7 +387,7 @@ function Footer() {
                 </span>
 
                 <span className="text-xs sm:text-sm break-all">
-                  sufiyansiddiqu@gmail.com
+                  info@sufiyanwebmarketing.in
                 </span>
               </a>
 
